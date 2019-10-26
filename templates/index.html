@@ -30,7 +30,7 @@
         </div>
 </nav>
 <div class="container">
-    <form action="/" method="POST">
+    <form>
         <div class="row">
             <div class='col-sm-3'>
                 <div class="form-group">
@@ -52,7 +52,7 @@
             <div class="col-sm-3">
                 <div class="form-group">
                     <label class="label-control" for="duration">Enter the Number Available Rooms</label>
-                    <input type="number" class="form-control" name="duration" id="duration" min=1>
+                    <input type="number" class="form-control" name="n_rooms" id="n_rooms" min=1>
                 </div>
             </div>
         </div>
@@ -164,9 +164,9 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-default" onclick="printOutput()">Submit</button>
+        <button class="btn btn-default" onclick="" id ="submit_btn">Submit</button>
     </form>
 </div>
- <script src="../static/index.js"></script>
+ <script src="static/index.js"></script>
 </body>
 </html>

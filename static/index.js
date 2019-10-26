@@ -1,11 +1,27 @@
+$(document).ready(function(){
 
-$(function () {
-    $('#datetimepicker1').datetimepicker(
-        {
-            format: 'HH:mm'
-        }
-    );
-});
+    console.log('Loaded')
+    $(function () {
+        $('#datetimepicker1').datetimepicker(
+            {
+                format: 'HH:mm'
+            }
+        );
+    });
+
+    $('#submit_btn').click(function(e){
+        e.preventDefault();
+        console.log('Ajax POST')
+
+
+    })
+
+
+
+
+
+})
+
 
 function addCourse(divName,addBtn){
     var formLength = document.getElementById(divName + '-main').childElementCount
