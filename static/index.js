@@ -1,11 +1,31 @@
 
-$(function () {
-    $('#datetimepicker1').datetimepicker(
+
+
+$(document).ready(()=>{
+
+console.log('loaded')
+
+$('#datetimepicker1').datetimepicker(
         {
             format: 'HH:mm'
         }
     );
-});
+$('#submit_btn').click(function(e){
+    e.preventDefault()
+    console.log('Ajax post')
+    let n_rooms = $('#roomLength').val()
+    let rooms = [...Array(n_rooms).keys()];
+    courses = $('.course-list').val()
+    console.log(courses)
+
+
+})
+
+
+})
+
+
+
 
 function addCourse(divName,addBtn){
     var formLength = document.getElementById(divName + '-main').childElementCount
@@ -63,3 +83,4 @@ function addInfo(divName, addBtn) {
     }
 
 }
+
