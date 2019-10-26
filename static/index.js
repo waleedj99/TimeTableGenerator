@@ -134,8 +134,8 @@ $(document).ready(function(){
         newDiv.id = "courses-"+ formLength + ""
         newDiv.innerHTML = ` <div class="col-lg-12 ">
                             <div class="input-group form-group">
-                            <input type="text" class="course-list input-group-addon form-control" id="courses-in-`+ formLength +`" name="course">
-                            <input type=text" class="course-list input-group-addon form-control" name="instructors">
+                            <input type="text"  placeholder="Enter Course"  class="course-list input-group-addon form-control" id="courses-in-`+ formLength +`" name="course">
+                            <input placeholder="Enter Instructors for the Course" type="text" class="course-list input-group-addon form-control" name="instructors">
                                 <span onclick="addCourse('courses',this.children[0].children[0])" class="input-group-addon">
                                     <span>
                                         <span   class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +` />
