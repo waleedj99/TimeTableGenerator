@@ -1,7 +1,20 @@
+var course_instructor_mapping = Object()
+let course_list=[]
+let instructors_list = ['wal']
+let new_days = []
+let start_time
+let url = "/"
+let periods_per_day
+let student_groups = []
 
-    var instructors_list_global = []
+
+var instructors_list_global = []
 
 $(document).ready(function(){
+
+
+    
+
 
     console.log('Loaded')
     $(function () {
@@ -12,14 +25,14 @@ $(document).ready(function(){
         );
     });
 
-
-
+    let year_list = []
+    let section_list = []
+    
     $('#submit_btn').click(function(e){
         e.preventDefault();
         console.log('Ajax POST')
 
         let courses = $('.course-list')
-        course_list = []
         courses.each(function(i, obj){
                 course_list.push($(this).val())
         })
@@ -30,8 +43,10 @@ $(document).ready(function(){
                 instructors_list.push($(this).val())
         })
 
+        periods_per_day = $('[name="n_periods"]').val()
+
         let nrooms = $('#n_rooms').val()
-        let start_time = $('#datetimepicker1').find('input').val()
+        start_time = $('#datetimepicker1').find('input').val()
         let duration = $('#duration').val()
         function check_day(d){
 
@@ -39,12 +54,30 @@ $(document).ready(function(){
             return false;
         }
         days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-        new_days = []
+        
         days.forEach(function(it){
             if(check_day(it)){
                 new_days.push(it)
             }
         })
+
+    let years = $('.year-list')
+        years.each(function (i, obj) {
+            year_list.push($(this).val())
+        })
+        let section = $('.section-list')
+        section.each(function(i,obj){
+             section_list.push($(this).val())
+             console.log(section_list)
+        })
+        
+        for(var i =0;i<year_list.length;i++){
+            
+            student_groups.push(year_list[i]+ '-' + section_list[i])
+            
+        }
+        console.log("Student Group" + student_groups)
+        console.log(duration)
         console.log(new_days)
         console.log(instructors_list)
         console.log(course_list)
@@ -54,10 +87,28 @@ $(document).ready(function(){
             let v2 = $(this).find("[name='course']").val()
             let v3 = $(this).find("[name='instructors']").val().split(',')
             console.log('COurse:'+v2+" ins="+v3)
-
-
-
+            course_instructor_mapping[v2] = v3
         })
+    
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {
+                start_time: start_time,
+                duration: duration,
+                working_data: new_days,
+                periods_per_day: periods_per_day,
+                course_instructors: course_instructor_mapping,
+                courses: course_list,
+                student_groups: student_groups
+            },
+            success:(res)=>{
+                console.log("HMMM")
+            },
+            dataType: 'json'
+        });
+
     })
 
 })

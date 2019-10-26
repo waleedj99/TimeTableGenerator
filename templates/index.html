@@ -30,7 +30,7 @@
     </div>
 </nav>
 <div class="container">
-    <form>
+    <form action="/" method="POST" >
         <div class="row">
             <div class='col-sm-3'>
                 <div class="form-group">
@@ -58,8 +58,8 @@
             
             <div class="col-sm-3">
                 <div class="form-group">
-                    <label class="label-control" for="roomLength">Enter the Number of hours</label>
-                    <input type="number" class="form-control" name="roomLength" id="roomLength" min=1>
+                    <label class="label-control" for="n_periods">Enter the Number of periods</label>
+                    <input type="number" class="form-control" name="n_periods" id="n_periods" min=1>
                 </div>
             </div>
             
@@ -123,9 +123,6 @@
                 </div>
             </div>
         </div>
-        
-
-
         <div class="row">
 
             <label class="col-lg-12 col-md-12 label-control">Select Courses</label>
@@ -147,17 +144,15 @@
                 </div>
             </div>
         </div>
-
-
         <div class="row">
             <div id="sinfo-main">
                 <div class="form-group" id="sinfo-0">
                     <label class="col-lg-12 col-md-12 label-control">Add Student Group</label>
                     <div class="col-lg-12 ">
                         <div class="input-group form-group">
-                            <input placeholder="Year" type="text" class="year-list input-group-addon form-control"
+                            <input placeholder="Year" name="year" type="text" class="year-list input-group-addon form-control"
                                    name="year-in-0" id="year-in-0">
-                            <input placeholder="Section" type="text" class="section-list input-group-addon form-control"
+                            <input placeholder="Section" name="section" type="text" class="section-list input-group-addon form-control"
                                    name="section-in-0" id="section-in-0">
                             <span onclick="addInfo('sinfo',this.children[0].children[0])" class="input-group-addon">
                                 <span>
@@ -169,7 +164,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+        
         </div>
         <button class="btn btn-default" id="submit_btn">Submit</button>
     </form>
