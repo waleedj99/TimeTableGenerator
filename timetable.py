@@ -57,6 +57,10 @@ class Class:
             return False
         return self.allowed_room.id == room_id
 
+    def __str__(self):
+        str_val = "Class id={}| course={}, type={}, instructor={}, student_group={}, allowed_room".format(self.id, self.course.name, self.type, self.instructor.fullname, self.student_group.name, self.allowed_room.name)
+        return str_val
+
 
 class Data:
     student_groups = []
@@ -384,13 +388,14 @@ class Driver:
         res = []
         for i in range(best_chromosome.chromosome_len):
             class_ = Data.get_class(i)
+            course = class_.course
             day = Data.working_days[(i * Data.days_per_week // best_chromosome.chromosome_len) % Data.days_per_week]
             room = Data.rooms[(i * len(Data.rooms) // best_chromosome.chromosome_len) % len(Data.rooms)]
             period = i % Data.periods_per_day
             period_str = Data._periods[period]
             stg = class_.student_group
             if stg is not None:
-                res.append({'day': day, 'period': period_str, 'student_group': stg.name, 'room': room.name})
+                res.append({'day': day, 'period': period_str, 'student_group': stg.name, 'room': room.name, 'course': course.name})
         print(res)
         return res
 

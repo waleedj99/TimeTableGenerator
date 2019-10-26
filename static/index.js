@@ -1,18 +1,18 @@
-var course_instructor_mapping = Object()
-let course_list=[]
-let instructors_list = ['wal']
-let new_days = []
-let start_time
-let url = "/"
-let periods_per_day
-let student_groups = []
+
 
 
 var instructors_list_global = []
 
 $(document).ready(function(){
 
-
+var course_instructor_mapping = Object()
+let course_list=[]
+let instructors_list = []
+let new_days = []
+let start_time
+let url = "/"
+let periods_per_day
+let student_groups = []
     
 
 
@@ -86,27 +86,28 @@ $(document).ready(function(){
         v1.each(function(i, obj){
             let v2 = $(this).find("[name='course']").val()
             let v3 = $(this).find("[name='instructors']").val().split(',')
-            console.log('COurse:'+v2+" ins="+v3)
+            console.log('Course:'+v2+" ins="+v3)
             course_instructor_mapping[v2] = v3
         })
-    
+        console.log(course_instructor_mapping)
 
         $.ajax({
             type: "POST",
-            url: url,
-            data: {
-                start_time: start_time,
-                duration: duration,
-                working_data: new_days,
-                periods_per_day: periods_per_day,
+            url: '/',
+            data: JSON.stringify({
+                start_time: '9:00',
+                duration: 1,
+                working_data: ["monday", "tuesday"],
+                periods_per_day: 6,
                 course_instructors: course_instructor_mapping,
                 courses: course_list,
-                student_groups: student_groups
-            },
-            success:(res)=>{
-                console.log("HMMM")
-            },
-            dataType: 'json'
+                student_groups: student_groups,
+                rooms: nrooms
+            }),
+
+            contentType: 'application/json;charset=UTF-8',
+        }).done(function(res){
+            console.log(res)
         });
 
     })
@@ -133,7 +134,7 @@ $(document).ready(function(){
         newDiv.className = 'form-group'
         newDiv.id = "courses-"+ formLength + ""
         newDiv.innerHTML = ` <div class="col-lg-12 ">
-                            <div class="input-group form-group">
+                            <div class="input-group form-group" name="instructor-course">
                             <input type="text"  placeholder="Enter Course"  class="course-list input-group-addon form-control" id="courses-in-`+ formLength +`" name="course">
                             <input placeholder="Enter Instructors for the Course" type="text" class="course-list input-group-addon form-control" name="instructors">
                                 <span onclick="addCourse('courses',this.children[0].children[0])" class="input-group-addon">
