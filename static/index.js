@@ -13,6 +13,9 @@ $(document).ready(function(){
         e.preventDefault();
         console.log('Ajax POST')
 
+        let courses = $('.course-list').val()
+        console.log(courses);
+
 
     })
 
