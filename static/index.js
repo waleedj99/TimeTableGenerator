@@ -101,9 +101,9 @@ function addInfo(divName, addBtn) {
                         <div class="input-group form-group">
                             <input placeholder = "Year" type="text" class="year-list input-group-addon form-control"name="year-in-0" id="year-in-0">
                             <input placeholder="Section" type="text" class="section-list input-group-addon form-control" name="section-in-0" id="section-in-0">
-                            <span class="input-group-addon">
+                            <span onclick="addInfo('sinfo',this)" class="input-group-addon">
                                 <span>
-                                    <span onclick="addInfo('sinfo',this)"
+                                    <span 
                                         class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +`" />
                                 </span>
                             </span>
