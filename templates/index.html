@@ -123,26 +123,6 @@
             </div>
 
         </div>
-        <div class="row">
-
-            <label class="col-lg-12 col-md-12 label-control">Select Instructors</label>
-            <div id="instructors-main">
-                <div class="form-group" id="instructors-0">
-                    <div class="col-lg-12 ">
-                        <div class="input-group form-group">
-                            <input type="text" class="instructors-list input-group-addon form-control"
-                                   id="instructors-in-0">
-                            <span onclick="addInstructor('instructors',this.children[0].children[0])" class="input-group-addon">
-                            <span>
-                                <span  class="input-group-append glyphicon glyphicon-plus"/>
-                            </span>
-                        </span>
-                            </input>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
 
         <div class="row">
@@ -152,11 +132,8 @@
                 <div class="form-group" id="courses-0">
                     <div class="col-lg-12 ">
                         <div class="input-group form-group">
-                            <input type="text" class="course-list input-group-addon form-control" id="courses">
-                            <select name="instructor-choice" multiple="multiple" class="form-control">
-
-
-                        </select>
+                            <input type="text" class="course-list input-group-addon form-control" id="courses" name="course">
+                            <input type=text" class="course-list input-group-addon form-control" name="instructors">
                             <span onclick="addCourse('courses',this.children[0].children[0])"  class="input-group-addon">
                             <span>
                                 <span 

@@ -49,6 +49,15 @@ $(document).ready(function(){
         console.log(instructors_list)
         console.log(course_list)
         console.log(start_time)
+        let v1 = $('[name="instructor-course"]')
+        v1.each(function(i, obj){
+            let v2 = $(this).find("[name='course']").val()
+            let v3 = $(this).find("[name='instructors']").val().split(',')
+            console.log('COurse:'+v2+" ins="+v3)
+
+
+
+        })
     })
 
 
@@ -75,11 +84,8 @@ $(document).ready(function(){
         newDiv.id = "courses-"+ formLength + ""
         newDiv.innerHTML = ` <div class="col-lg-12 ">
                             <div class="input-group form-group">
-                            <input type="text" class="course-list input-group-addon form-control" id="courses-in-`+ formLength +`">
-                                 <select name="instructor-choice" multiple="multiple" class="form-control">
-
-
-                        </select>
+                            <input type="text" class="course-list input-group-addon form-control" id="courses-in-`+ formLength +`" name="course">
+                            <input type=text" class="course-list input-group-addon form-control" name="instructors">
                                 <span onclick="addCourse('courses',this.children[0].children[0])" class="input-group-addon">
                                     <span>
                                         <span   class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +` />
