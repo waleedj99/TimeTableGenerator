@@ -5,29 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Index</title>
-    
-   
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
-    
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
 
     <link rel="stylesheet" href="static/index.css">
 </head>
 <body>
 <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <div class="navbar-brand">
-                    Time Table
-                </div>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div class="navbar-brand">
+                Time Table
             </div>
         </div>
+    </div>
 </nav>
 <div class="container">
     <form>
@@ -36,7 +36,7 @@
                 <div class="form-group">
                     <label class="label-control" for="startTime">Enter Start Time</label>
                     <div class='input-group date' id='datetimepicker1'>
-                        <input type='text' class="form-control" id="startTime" />
+                        <input type='text' class="form-control" id="startTime"/>
                         <span class="input-group-addon">
                             <span class="glyphicon  glyphicon-time"></span>
                         </span>
@@ -44,10 +44,10 @@
                 </div>
             </div>
             <div class="col-sm-3">
-            <div class="form-group">
-               <label class="label-control" for="duration">Duration of one period</label>
-               <input type="number" class="form-control" name="duration" id="duration" min=1 max = 9> 
-            </div>
+                <div class="form-group">
+                    <label class="label-control" for="duration">Duration of one period</label>
+                    <input type="number" class="form-control" name="duration" id="duration" min=1 max=9>
+                </div>
             </div>
             <div class="col-sm-3">
                 <div class="form-group">
@@ -60,57 +60,57 @@
             <div style="position: relative;left: 5%;">
                 <label for=""><h1> Select the Available Days </h1></label>
                 <div id="daySelect">
-                <div class="col-sm-1">
-                    <div class="form-group">
-                        <label class= "label-control" for="">Sunday</label>
-                        <input id="sun-check" class="form-control" type="checkbox" value="sunday">
+                    <div class="col-sm-1">
+                        <div class="form-group">
+                            <label class="label-control" for="">Sunday</label>
+                            <input id="sun-check" class="form-control" type="checkbox" value="sunday">
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-1">
-                    <div class="form-group">
-                    
-                        <label class="label-control" for="">Monday</label>
-                        <input id="mon-check" class="form-control" type="checkbox" value="monday">
-                    
+                    <div class="col-sm-1">
+                        <div class="form-group">
+
+                            <label class="label-control" for="">Monday</label>
+                            <input id="mon-check" class="form-control" type="checkbox" value="monday">
+
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-1">
-                    <div class="form-group">
-                    
-                        <label class="label-control" for="">Tuesday</label>
-                        <input id="tue-check" class="form-control" type="checkbox" value="tuesday">
-                    
+                    <div class="col-sm-1">
+                        <div class="form-group">
+
+                            <label class="label-control" for="">Tuesday</label>
+                            <input id="tue-check" class="form-control" type="checkbox" value="tuesday">
+
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-1">
-                    <div class="form-group">
-                
-                        <label class="label-control" for="">Wednesday</label>
-                        <input id="wed-check" class="form-control" type="checkbox" value="wednesday">
-                    
+                    <div class="col-sm-1">
+                        <div class="form-group">
+
+                            <label class="label-control" for="">Wednesday</label>
+                            <input id="wed-check" class="form-control" type="checkbox" value="wednesday">
+
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-1">
-                    <div class="form-group">
-                    
-                        <label class="label-control" for="">Thursday</label>
-                        <input id="thu-check" class="form-control" type="checkbox" value="thursday">
-                    
+                    <div class="col-sm-1">
+                        <div class="form-group">
+
+                            <label class="label-control" for="">Thursday</label>
+                            <input id="thu-check" class="form-control" type="checkbox" value="thursday">
+
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-1">
-                    <div class="form-group">
-                        
-                        <label class="label-control" for="">Friday</label>
-                        <input id="fri-check" class="form-control" type="checkbox" value="friday">
+                    <div class="col-sm-1">
+                        <div class="form-group">
+
+                            <label class="label-control" for="">Friday</label>
+                            <input id="fri-check" class="form-control" type="checkbox" value="friday">
+                        </div>
                     </div>
-                </div>
-                <div class="col-sm-1">
-                    <div class="form-group">
-                        <label class="label-control" for="">Saturday</label>
-                        <input id="sat-check" class="form-control" type="checkbox" value="saturday">
+                    <div class="col-sm-1">
+                        <div class="form-group">
+                            <label class="label-control" for="">Saturday</label>
+                            <input id="sat-check" class="form-control" type="checkbox" value="saturday">
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
@@ -118,67 +118,75 @@
             <div class="col-sm-3">
                 <div class="form-group">
                     <label class="label-control" for="roomLength">Enter the Number of hours</label>
-                    <input type="number" class="form-control" name="roomLength" id="roomLength" min=1 >
+                    <input type="number" class="form-control" name="roomLength" id="roomLength" min=1>
                 </div>
             </div>
-            
+
         </div>
         <div class="row">
 
             <label class="col-lg-12 col-md-12 label-control">Select Instructors</label>
             <div id="instructors-main">
-            <div class="form-group" id="instructors-0">
-                <div class="col-lg-12 ">
-                    <div class="input-group form-group">
-                        <input type="text" class="instructors-list input-group-addon form-control" id="instructors">
-                        <span class="input-group-addon">
+                <div class="form-group" id="instructors-0">
+                    <div class="col-lg-12 ">
+                        <div class="input-group form-group">
+                            <input type="text" class="instructors-list input-group-addon form-control"
+                                   id="instructors-in-0">
+                            <span class="input-group-addon">
                             <span>
-                                <span onclick="addInstructor('instructors',this)" class="input-group-append glyphicon glyphicon-plus" id=`+
-                                    formLength++ +` />
+                                <span onclick="addInstructor('instructors',this)"
+                                      class="input-group-append glyphicon glyphicon-plus"/>
                             </span>
                         </span>
-                        </input>
+                            </input>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
 
 
         <div class="row">
-           
+
             <label class="col-lg-12 col-md-12 label-control">Select Courses</label>
             <div id="courses-main">
-            <div class="form-group" id="courses-0">
-                <div class="col-lg-12 ">
-                    <div class="input-group form-group">
-                        <input type="text" class="course-list input-group-addon form-control" id="courses">
-                        <span class="input-group-addon">
+                <div class="form-group" id="courses-0">
+                    <div class="col-sm-6 ">
+                        <div class="input-group form-group">
+                            <input type="text" class="course-list input-group-addon form-control" id="courses">
+                            <select name="instructor-choice" multiple="multiple" class="form-control">
+
+
+                        </select>
+                            <span class="input-group-addon">
                             <span>
-                                <span onclick="addCourse('courses',this)" class="input-group-append glyphicon glyphicon-plus" id=`+
-                                    formLength++ +` />
+                                <span onclick="addCourse('courses',this)"
+                                      class="input-group-append glyphicon glyphicon-plus" id=`+
+                                      formLength++ +`/>
                             </span>
                         </span>
-                        </input>
+                            </input>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
 
 
-        <div class="row">    
+        <div class="row">
             <div id="sinfo-main">
                 <div class="form-group" id="sinfo-0">
                     <label class="form-label">Add student group</label>
                     <div class="col-lg-12 ">
                         <div class="input-group form-group">
-                            <input placeholder = "Year" type="text" class="year-list input-group-addon form-control" name="year-in-0" id="year-in-0">
-                            <input placeholder="Section" type="text" class="section-list input-group-addon form-control" name="section-in-0" id="section-in-0">
+                            <input placeholder="Year" type="text" class="year-list input-group-addon form-control"
+                                   name="year-in-0" id="year-in-0">
+                            <input placeholder="Section" type="text" class="section-list input-group-addon form-control"
+                                   name="section-in-0" id="section-in-0">
                             <span class="input-group-addon">
                                 <span>
                                     <span onclick="addInfo('sinfo',this)"
-                                        class="input-group-append glyphicon glyphicon-plus"  />
+                                          class="input-group-append glyphicon glyphicon-plus"/>
                                 </span>
                             </span>
                             </input>
@@ -187,9 +195,9 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-default" id ="submit_btn">Submit</button>
+        <button class="btn btn-default" id="submit_btn">Submit</button>
     </form>
 </div>
- <script src="static/index.js"></script>
+<script src="static/index.js"></script>
 </body>
 </html>

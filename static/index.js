@@ -1,3 +1,6 @@
+
+    var instructors_list_global = []
+
 $(document).ready(function(){
 
     console.log('Loaded')
@@ -47,10 +50,11 @@ $(document).ready(function(){
         console.log(course_list)
         console.log(start_time)
     })
+
+
 })
 
-
-function addCourse(divName,addBtn){
+   function addCourse(divName,addBtn){
     var formLength = document.getElementById(divName + '-main').childElementCount
     console.log(addBtn.id)
     if (addBtn.className.includes("glyphicon-minus")) {
@@ -74,7 +78,7 @@ function addCourse(divName,addBtn){
                     </div>`
         document.getElementById(divName+'-main').appendChild(newDiv)
     }
-    
+
 }
 
 
@@ -113,6 +117,17 @@ function addInstructor(divName,addBtn){
     if (addBtn.className.includes("glyphicon-minus")) {
         addBtn.parentNode.parentNode.parentNode.parentNode.removeChild(addBtn.parentNode.parentNode.parentNode)
     }
+
+    instructors_list_global.push($('#'+divName+'-in-'+(formLength-1)).val())
+
+    items = []
+    instructors_list_global.forEach(function(item){
+        let i = `<option value=`+item+`">`+item+`</option>`
+        items.push(i)
+    })
+
+    $('[name="instructor-choice"]').html(items)
+
     if (addBtn.className.includes("glyphicon-plus")) {
         addBtn.className = "input-group-append  glyphicon glyphicon-minus"
         var newDiv = document.createElement('div')
@@ -133,3 +148,5 @@ function addInstructor(divName,addBtn){
     }
 
 }
+
+
