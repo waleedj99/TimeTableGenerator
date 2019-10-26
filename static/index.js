@@ -9,20 +9,44 @@ $(document).ready(function(){
         );
     });
 
+
+
     $('#submit_btn').click(function(e){
         e.preventDefault();
         console.log('Ajax POST')
 
-        let courses = $('.course-list').val()
-        console.log(courses);
+        let courses = $('.course-list')
+        course_list = []
+        courses.each(function(i, obj){
+                course_list.push($(this).val())
+        })
 
+        let instructors = $('.instructors-list')
+        instructors_list = []
+        instructors.each(function(i, obj){
+                instructors_list.push($(this).val())
+        })
 
+        let nrooms = $('#n_rooms').val()
+        let start_time = $('#datetimepicker1').find('input').val()
+        let duration = $('#duration').val()
+        function check_day(d){
+
+            if ($("#"+d.substring(0, 3)+"-check").prop('checked'))return true;
+            return false;
+        }
+        days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+        new_days = []
+        days.forEach(function(it){
+            if(check_day(it)){
+                new_days.push(it)
+            }
+        })
+        console.log(new_days)
+        console.log(instructors_list)
+        console.log(course_list)
+        console.log(start_time)
     })
-
-
-
-
-
 })
 
 
@@ -79,6 +103,33 @@ function addInfo(divName, addBtn) {
                         </div>
                     </div>`
         document.getElementById(divName + '-main').appendChild(newDiv)
+    }
+
+}
+
+function addInstructor(divName,addBtn){
+    var formLength = document.getElementById(divName + '-main').childElementCount
+    console.log(addBtn.id)
+    if (addBtn.className.includes("glyphicon-minus")) {
+        addBtn.parentNode.parentNode.parentNode.parentNode.removeChild(addBtn.parentNode.parentNode.parentNode)
+    }
+    if (addBtn.className.includes("glyphicon-plus")) {
+        addBtn.className = "input-group-append  glyphicon glyphicon-minus"
+        var newDiv = document.createElement('div')
+        newDiv.className = 'form-group'
+        newDiv.id = "instructors-"+ formLength + ""
+        newDiv.innerHTML = ` <div class="col-lg-12 ">
+                            <div class="input-group form-group">
+                            <input type="text" class="instructors-list input-group-addon form-control" id="instructors-in-`+ formLength +`">
+                                <span class="input-group-addon">
+                                    <span>
+                                        <span  onclick="addInstructor('instructors',this)" class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +` />
+                                    </span>
+                                </span>
+                            </input>
+                        </div>
+                    </div>`
+        document.getElementById(divName+'-main').appendChild(newDiv)
     }
 
 }
