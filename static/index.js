@@ -60,7 +60,6 @@ $(document).ready(function(){
         })
     })
 
-
 })
 
    function addCourse(divName,addBtn){

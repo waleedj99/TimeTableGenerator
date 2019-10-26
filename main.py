@@ -9,6 +9,7 @@ def home():
     if request.method == 'GET':
         return render_template('index.html')
     else:
+
         working_days = request.form.get('working_data')  # dictionary, day-bool
         start_time = request.form.get('start_time')
         duration = request.form.get('duration')
