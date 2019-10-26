@@ -57,6 +57,14 @@ $(document).ready(function(){
    function addCourse(divName,addBtn){
     var formLength = document.getElementById(divName + '-main').childElementCount
     console.log(addBtn.id)
+
+    items = []
+    instructors_list_global.forEach(function(item){
+        let i = `<option value=`+item+`">`+item+`</option>`
+        items.push(i)
+    })
+
+
     if (addBtn.className.includes("glyphicon-minus")) {
         addBtn.parentNode.parentNode.parentNode.parentNode.removeChild(addBtn.parentNode.parentNode.parentNode)
     }
@@ -81,6 +89,8 @@ $(document).ready(function(){
                         </div>
                     </div>`
         document.getElementById(divName+'-main').appendChild(newDiv)
+            $('[name="instructor-choice"]').html(items)
+
     }
 
 }
