@@ -37,8 +37,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="155">
               <caret line="141" column="96" selection-start-line="141" selection-start-column="96" selection-end-line="141" selection-end-column="96" />
+=======
+            <state relative-caret-position="75">
+              <caret line="135" column="116" lean-forward="true" selection-start-line="134" selection-start-column="28" selection-end-line="135" selection-end-column="116" />
+>>>>>>> a91beaf87a08ced1042af363bb459ebc2e3050f1
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#1;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -49,8 +54,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/static/index.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="146">
               <caret line="82" column="38" lean-forward="true" selection-start-line="82" selection-start-column="38" selection-end-line="82" selection-end-column="38" />
+=======
+            <state relative-caret-position="105">
+              <caret line="85" column="62" selection-start-line="85" selection-start-column="62" selection-end-line="85" selection-end-column="62" />
+>>>>>>> a91beaf87a08ced1042af363bb459ebc2e3050f1
             </state>
           </provider>
         </entry>
@@ -104,7 +114,11 @@
       <find>addInstructor</find>
       <find>&lt;sele</find>
       <find>&lt;op</find>
+<<<<<<< HEAD
       <find>Instr</find>
+=======
+      <find>Instructo</find>
+>>>>>>> a91beaf87a08ced1042af363bb459ebc2e3050f1
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -249,8 +263,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="155">
           <caret line="141" column="96" selection-start-line="141" selection-start-column="96" selection-end-line="141" selection-end-column="96" />
+=======
+        <state relative-caret-position="75">
+          <caret line="135" column="116" lean-forward="true" selection-start-line="134" selection-start-column="28" selection-end-line="135" selection-end-column="116" />
+>>>>>>> a91beaf87a08ced1042af363bb459ebc2e3050f1
           <folding>
             <element signature="n#style#0;n#div#0;n#div#1;n#form#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
@@ -259,8 +278,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/static/index.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="146">
           <caret line="82" column="38" lean-forward="true" selection-start-line="82" selection-start-column="38" selection-end-line="82" selection-end-column="38" />
+=======
+        <state relative-caret-position="105">
+          <caret line="85" column="62" selection-start-line="85" selection-start-column="62" selection-end-line="85" selection-end-column="62" />
+>>>>>>> a91beaf87a08ced1042af363bb459ebc2e3050f1
         </state>
       </provider>
     </entry>
