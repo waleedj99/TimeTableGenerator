@@ -55,10 +55,19 @@
                     <input type="number" class="form-control" name="n_rooms" id="n_rooms" min=1>
                 </div>
             </div>
+            
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="label-control" for="roomLength">Enter the Number of hours</label>
+                    <input type="number" class="form-control" name="roomLength" id="roomLength" min=1>
+                </div>
+            </div>
+            
+            
         </div>
         <div class="row">
-            <div style="position: relative;left: 5%;">
-                <label for=""><h1> Select the Available Days </h1></label>
+            <div >
+                <label class="col-lg-12 col-md-12 label-control"><h2>Select the Available days</h2></label>
                 <div id="daySelect">
                     <div class="col-sm-1">
                         <div class="form-group">
@@ -114,15 +123,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <label class="label-control" for="roomLength">Enter the Number of hours</label>
-                    <input type="number" class="form-control" name="roomLength" id="roomLength" min=1>
-                </div>
-            </div>
-
-        </div>
+        
 
 
         <div class="row">
@@ -132,8 +133,8 @@
                 <div class="form-group" id="courses-0">
                     <div class="col-lg-12 ">
                         <div class="input-group form-group">
-                            <input type="text" class="course-list input-group-addon form-control" id="courses" name="course">
-                            <input type=text" class="course-list input-group-addon form-control" name="instructors">
+                            <input placeholder="Enter Course" type="text" class="course-list input-group-addon form-control" id="courses" name="course">
+                            <input placeholder="Enter Instructors for the Course" type="text" class="course-list input-group-addon form-control" name="instructors">
                             <span onclick="addCourse('courses',this.children[0].children[0])"  class="input-group-addon">
                             <span>
                                 <span 
@@ -151,7 +152,7 @@
         <div class="row">
             <div id="sinfo-main">
                 <div class="form-group" id="sinfo-0">
-                    <label class="form-label">Add student group</label>
+                    <label class="col-lg-12 col-md-12 label-control">Add Student Group</label>
                     <div class="col-lg-12 ">
                         <div class="input-group form-group">
                             <input placeholder="Year" type="text" class="year-list input-group-addon form-control"
