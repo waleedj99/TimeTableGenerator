@@ -80,9 +80,9 @@ $(document).ready(function(){
 
 
                         </select>
-                                <span class="input-group-addon">
+                                <span onclick="addCourse('courses',this.children[0].children[0])" class="input-group-addon">
                                     <span>
-                                        <span  onclick="addCourse('courses',this)" class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +` />
+                                        <span   class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +` />
                                     </span>
                                 </span>
                             </input>
@@ -111,10 +111,9 @@ function addInfo(divName, addBtn) {
                         <div class="input-group form-group">
                             <input placeholder = "Year" type="text" class="year-list input-group-addon form-control"name="year-in-0" id="year-in-0">
                             <input placeholder="Section" type="text" class="section-list input-group-addon form-control" name="section-in-0" id="section-in-0">
-                            <span onclick="addInfo('sinfo',this)" class="input-group-addon">
+                            <span onclick="addInfo('sinfo',this.children[0].children[0])" class="input-group-addon">
                                 <span>
-                                    <span 
-                                        class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +`" />
+                                    <span class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +`" />
                                 </span>
                             </span>
                             </input>
@@ -151,9 +150,9 @@ function addInstructor(divName,addBtn){
                             <div class="input-group form-group">
                             <input type="text" class="instructors-list input-group-addon form-control" id="instructors-in-`+ formLength +`">
 
-                                <span class="input-group-addon">
+                                <span onclick="addInstructor('instructors',this.children[0].children[0])" class="input-group-addon">
                                     <span>
-                                        <span  onclick="addInstructor('instructors',this)" class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +` />
+                                        <span class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +` />
                                     </span>
                                 </span>
                             </input>
