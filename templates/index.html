@@ -45,7 +45,7 @@
             </div>
             <div class="col-sm-3">
             <div class="form-group">
-               <label class="label-control" for="duration">Enter the Number of hours</label>
+               <label class="label-control" for="duration">Duration of one period</label>
                <input type="number" class="form-control" name="duration" id="duration" min=1 max = 9> 
             </div>
             </div>
@@ -123,7 +123,28 @@
             </div>
             
         </div>
-        
+        <div class="row">
+
+            <label class="col-lg-12 col-md-12 label-control">Select Instructors</label>
+            <div id="instructors-main">
+            <div class="form-group" id="instructors-0">
+                <div class="col-lg-12 ">
+                    <div class="input-group form-group">
+                        <input type="text" class="instructors-list input-group-addon form-control" id="instructors">
+                        <span class="input-group-addon">
+                            <span>
+                                <span onclick="addInstructor('instructors',this)" class="input-group-append glyphicon glyphicon-plus" id=`+
+                                    formLength++ +` />
+                            </span>
+                        </span>
+                        </input>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
         <div class="row">
            
             <label class="col-lg-12 col-md-12 label-control">Select Courses</label>
@@ -144,6 +165,7 @@
             </div>
             </div>
         </div>
+
 
         <div class="row">    
             <div id="sinfo-main">
