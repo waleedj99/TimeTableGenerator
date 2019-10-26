@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, jsonify
 from timetable import Data, Driver, Instructor, Class, Course, StudentGroup, Room
 import json
-
+import itertools
 app = Flask(__name__)
 
 
@@ -36,10 +36,11 @@ def home():
         instructors_ = []
         if "" in course_instructors:
             del course_instructors[""]
-        for r, stg in zip(rooms, student_groups):
+
+        for n in range(2):
             for c in courses:
                 ins = course_instructors[c]
-                for i in ins:
+                for i, stg, r in zip(ins, student_groups, rooms):
                     room_ = Room(r)
                     rooms_.append(room_)
                     stg_ = StudentGroup(stg)

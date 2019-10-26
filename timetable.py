@@ -58,7 +58,12 @@ class Class:
         return self.allowed_room.id == room_id
 
     def __str__(self):
-        str_val = "Class id={}| course={}, type={}, instructor={}, student_group={}, allowed_room".format(self.id, self.course.name, self.type, self.instructor.fullname, self.student_group.name, self.allowed_room.name)
+        str_val = "Class id={}| course={}, type={}, instructor={}, student_group={}, allowed_room={}".format(self.id,
+                                                                                                             self.course.name,
+                                                                                                             self.type,
+                                                                                                             self.instructor.fullname,
+                                                                                                             self.student_group.name,
+                                                                                                             self.allowed_room.name)
         return str_val
 
 
@@ -348,9 +353,9 @@ class Generator:
 
 
 class Driver:
-    population_size = 10
-    max_generations = 10000
-    mutation_rate = 0.5
+    population_size = 40
+    max_generations = 2000
+    mutation_rate = 0.10
 
     def generate_timetable(self):
         gen = Generator()
@@ -382,7 +387,8 @@ class Driver:
         if abs(gen.population.best_fitness_score - 1.0) < 1e-9:
             return gen.population.get_fittest_chromosome()
         else:
-            return None
+            # return None
+            return gen.population.get_fittest_chromosome()
 
     def generate_timetable_response(self, best_chromosome: Chromosome):
         res = []
@@ -395,47 +401,107 @@ class Driver:
             period_str = Data._periods[period]
             stg = class_.student_group
             if stg is not None:
-                res.append({'day': day, 'period': period_str, 'student_group': stg.name, 'room': room.name, 'course': course.name})
+                res.append({'day': day, 'period': period_str, 'student_group': stg.name, 'room': room.name,
+                            'course': course.name})
         print(res)
         return res
 
 
 if __name__ == '__main__':
-    course0 = Course("WEB", "101")
-    course1 = Course("ML", "103")
-    course2 = Course("CS", "10")
+    course0 = Course("MATH", "101")
+    course1 = Course("CHEM", "103")
+    course2 = Course("PIC", "104")
+    course3 = Course("CAED", "105")
+    course4 = Course("ELN", "106")
+    course5 = Course("BCP", "107")
 
-    ins0 = Instructor("ahmed")
-    ins1 = Instructor("mahmoud")
-    ins2 = Instructor("mohamed")
+    ins0 = Instructor("Padma")
+    ins1 = Instructor("Shiva")
+    ins2 = Instructor("Harish")
+    ins3 = Instructor("Shiv")
+    ins4 = Instructor("Shobha")
+    ins5 = Instructor("Rahul")
+    ins6 = Instructor("Meena")
 
-    room0 = Room("201")
-    room1 = Room("202")
+    ins7 = Instructor("Soumya")
+    ins8 = Instructor("Uma")
+    ins9 = Instructor("Deepak")
+    ins10 = Instructor("Dhruva")
 
-    stg0 = StudentGroup("CS-A")
-    stg1 = StudentGroup("CS-B")
-    stg2 = StudentGroup("CS-C")
+    ins11 = Instructor("Umesha")
+    ins12 = Instructor("Sunanda")
+    ins13 = Instructor("Anna")
+    ins14 = Instructor("Ravi")
+    ins15 = Instructor("Poornima")
+    ins16 = Instructor("Kalpana")
+
+    ins17 = Instructor("Shashi")
+    ins18 = Instructor("Anantha")
+    ins18 = Instructor("Vijaya")
+    ins19 = Instructor("Shubha")
+    ins20 = Instructor("Nitesh")
+
+    room0 = Room("308")
+    room1 = Room("309")
+    room2 = Room("310")
+    room3 = Room("311")
+
+    stg0 = StudentGroup("1A")
+    stg1 = StudentGroup("1B")
+    stg2 = StudentGroup("1C")
+    stg3 = StudentGroup("1D")
 
     c0 = Class(course=course0, type="Lec", instructor=ins0, student_group=stg0, allowed_room=room0)
     c1 = Class(course=course0, type="Lec", instructor=ins0, student_group=stg0, allowed_room=room0)
     c2 = Class(course=course0, type="Lec", instructor=ins0, student_group=stg0, allowed_room=room0)
-    c3 = Class(course=course0, type="Lec", instructor=ins0, student_group=stg0, allowed_room=room0)
-    c4 = Class(course=course2, type="Lec", instructor=ins0, student_group=stg0, allowed_room=room0)
-    c5 = Class(course=course2, type="Lec", instructor=ins0, student_group=stg0, allowed_room=room0)
-    c6 = Class(course=course0, type="Lec", instructor=ins1, student_group=stg1, allowed_room=room1)
-    c7 = Class(course=course1, type="Lec", instructor=ins1, student_group=stg1, allowed_room=room1)
-    c8 = Class(course=course2, type="Lec", instructor=ins1, student_group=stg1, allowed_room=room1)
-    c9 = Class(course=course0, type="Lec", instructor=ins1, student_group=stg1, allowed_room=room1)
-    c10 = Class(course=course2, type="Lec", instructor=ins1, student_group=stg1, allowed_room=room1)
+    c3 = Class(course=course1, type="Lec", instructor=ins1, student_group=stg0, allowed_room=room0)
+    c4 = Class(course=course1, type="Lec", instructor=ins1, student_group=stg0, allowed_room=room0)
+    c5 = Class(course=course1, type="Lec", instructor=ins1, student_group=stg0, allowed_room=room0)
+    c6 = Class(course=course2, type="Lec", instructor=ins2, student_group=stg0, allowed_room=room0)
+    c7 = Class(course=course2, type="Lec", instructor=ins2, student_group=stg0, allowed_room=room0)
+    c8 = Class(course=course2, type="Lec", instructor=ins2, student_group=stg0, allowed_room=room0)
+    c9 = Class(course=course3, type="Lec", instructor=ins3, student_group=stg0, allowed_room=room0)
+    c10 = Class(course=course3, type="Lec", instructor=ins3, student_group=stg0, allowed_room=room0)
+    c11 = Class(course=course3, type="Lec", instructor=ins3, student_group=stg0, allowed_room=room0)
+    c12 = Class(course=course4, type="Lec", instructor=ins4, student_group=stg0, allowed_room=room0)
+    c13 = Class(course=course4, type="Lec", instructor=ins4, student_group=stg0, allowed_room=room0)
+    c14 = Class(course=course4, type="Lec", instructor=ins4, student_group=stg0, allowed_room=room0)
+    c15 = Class(course=course5, type="Lec", instructor=ins6, student_group=stg0, allowed_room=room0)
+    c16 = Class(course=course5, type="Lec", instructor=ins6, student_group=stg0, allowed_room=room0)
+    c17 = Class(course=course5, type="Lec", instructor=ins6, student_group=stg0, allowed_room=room0)
 
-    Data.courses = [course0, course1, course2]
+    c18 = Class(course=course0, type="Lec", instructor=ins12, student_group=stg1, allowed_room=room1)
+    c19 = Class(course=course0, type="Lec", instructor=ins12, student_group=stg1, allowed_room=room1)
+    c20 = Class(course=course0, type="Lec", instructor=ins12, student_group=stg1, allowed_room=room1)
+    c21 = Class(course=course1, type="Lec", instructor=ins7, student_group=stg1, allowed_room=room1)
+    c22 = Class(course=course1, type="Lec", instructor=ins7, student_group=stg1, allowed_room=room1)
+    c23 = Class(course=course1, type="Lec", instructor=ins7, student_group=stg1, allowed_room=room1)
+    c24 = Class(course=course2, type="Lec", instructor=ins8, student_group=stg1, allowed_room=room1)
+    c25 = Class(course=course2, type="Lec", instructor=ins8, student_group=stg1, allowed_room=room1)
+    c26 = Class(course=course2, type="Lec", instructor=ins8, student_group=stg1, allowed_room=room1)
+    c27 = Class(course=course3, type="Lec", instructor=ins19, student_group=stg1, allowed_room=room1)
+    c28 = Class(course=course3, type="Lec", instructor=ins19, student_group=stg1, allowed_room=room1)
+    c29 = Class(course=course3, type="Lec", instructor=ins19, student_group=stg1, allowed_room=room1)
+    c30 = Class(course=course4, type="Lec", instructor=ins10, student_group=stg1, allowed_room=room1)
+    c31 = Class(course=course4, type="Lec", instructor=ins10, student_group=stg1, allowed_room=room1)
+    c32 = Class(course=course4, type="Lec", instructor=ins10, student_group=stg1, allowed_room=room1)
+    c33 = Class(course=course5, type="Lec", instructor=ins20, student_group=stg1, allowed_room=room1)
+    c34 = Class(course=course5, type="Lec", instructor=ins20, student_group=stg1, allowed_room=room1)
+    c35 = Class(course=course5, type="Lec", instructor=ins20, student_group=stg1, allowed_room=room1)
+
+    Data.courses = [course0, course1, course2, course3, course4, course5]
     Data.set_working_days({'monday': True, 'tuesday': True, 'wednesday': True, 'thursday': True, 'friday': True,
-                           'saturday': False})
+                           'saturday': True})
     Data.rooms = [room0, room1]
-    Data.instructors = [ins0, ins1, ins2]
-    Data.student_groups = [stg0, stg1, stg2]
-    Data.set_classes([c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10])
-    Data.periods_per_day = 6
+    Data.instructors = [ins0, ins1, ins2, ins3, ins4, ins5, ins6, ins7, ins8, ins9, ins10, ins11, ins12, ins13, ins14,
+                        ins15, ins16, ins17, ins18, ins19, ins20]
+    Data.student_groups = [stg0, stg1]
+    Data.set_classes(
+        [c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c12, c14, c15, c16, c17, c18, c19, c20, c21, c22, c23,
+         c24,
+         c25, c26, c27, c28, c29, c30, c31, c32, c33, c34, c35
+         ])
+    Data.periods_per_day = 8
     Data.set_periods("9:00", 1)
 
     driver = Driver()

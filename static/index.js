@@ -90,7 +90,7 @@ let student_groups = []
             course_instructor_mapping[v2] = v3
         })
         console.log(course_instructor_mapping)
-
+        $(this).text('Loading')
         $.ajax({
             type: "POST",
             url: '/',
@@ -108,6 +108,7 @@ let student_groups = []
             contentType: 'application/json;charset=UTF-8',
         }).done(function(res){
             console.log(res)
+            $(this).text("Submit")
         });
 
     })
