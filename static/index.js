@@ -16,10 +16,6 @@ $(document).ready(function(){
 
     })
 
-
-
-
-
 })
 
 
