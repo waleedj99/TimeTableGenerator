@@ -74,17 +74,17 @@ $(document).ready(function(){
         newDiv.className = 'form-group'
         newDiv.id = "courses-"+ formLength + ""
         newDiv.innerHTML = ` <div class="col-lg-12 ">
-                            <div class="input-group form-group">
-                            <input type="text" class="course-list input-group-addon form-control" id="courses-in-`+ formLength +`">
-                                 <select name="instructor-choice" multiple="multiple" class="form-control">
+                        <div class="input-group form-group">
+                            <input type="text" class="course-list input-group-addon form-control" id="courses">
+                            <input type="text" class="instructor-list input-group-addon form-control" id="instructor" name="instructors">
 
-
-                        </select>
-                                <span onclick="addCourse('courses',this.children[0].children[0])" class="input-group-addon">
-                                    <span>
-                                        <span   class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +` />
-                                    </span>
-                                </span>
+                            <span onclick="addCourse('courses',this.children[0].children[0])"  class="input-group-addon">
+                            <span>
+                                <span 
+                                      class="input-group-append glyphicon glyphicon-plus" id=`+
+                                      formLength++ +`/>
+                            </span>
+                        </span>
                             </input>
                         </div>
                     </div>`
@@ -124,43 +124,5 @@ function addInfo(divName, addBtn) {
 
 }
 
-function addInstructor(divName,addBtn){
-    var formLength = document.getElementById(divName + '-main').childElementCount
-    console.log(addBtn.id)
-    if (addBtn.className.includes("glyphicon-minus")) {
-        addBtn.parentNode.parentNode.parentNode.parentNode.removeChild(addBtn.parentNode.parentNode.parentNode)
-    }
-
-    instructors_list_global.push($('#'+divName+'-in-'+(formLength-1)).val())
-
-    items = []
-    instructors_list_global.forEach(function(item){
-        let i = `<option value=`+item+`">`+item+`</option>`
-        items.push(i)
-    })
-
-    $('[name="instructor-choice"]').html(items)
-
-    if (addBtn.className.includes("glyphicon-plus")) {
-        addBtn.className = "input-group-append  glyphicon glyphicon-minus"
-        var newDiv = document.createElement('div')
-        newDiv.className = 'form-group'
-        newDiv.id = "instructors-"+ formLength + ""
-        newDiv.innerHTML = ` <div class="col-lg-12 ">
-                            <div class="input-group form-group">
-                            <input type="text" class="instructors-list input-group-addon form-control" id="instructors-in-`+ formLength +`">
-
-                                <span onclick="addInstructor('instructors',this.children[0].children[0])" class="input-group-addon">
-                                    <span>
-                                        <span class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +` />
-                                    </span>
-                                </span>
-                            </input>
-                        </div>
-                    </div>`
-        document.getElementById(divName+'-main').appendChild(newDiv)
-    }
-
-}
 
 
