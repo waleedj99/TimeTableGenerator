@@ -68,6 +68,10 @@ $(document).ready(function(){
         newDiv.innerHTML = ` <div class="col-lg-12 ">
                             <div class="input-group form-group">
                             <input type="text" class="course-list input-group-addon form-control" id="courses-in-`+ formLength +`">
+                                 <select name="instructor-choice" multiple="multiple" class="form-control">
+
+
+                        </select>
                                 <span class="input-group-addon">
                                     <span>
                                         <span  onclick="addCourse('courses',this)" class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +` />
@@ -136,6 +140,7 @@ function addInstructor(divName,addBtn){
         newDiv.innerHTML = ` <div class="col-lg-12 ">
                             <div class="input-group form-group">
                             <input type="text" class="instructors-list input-group-addon form-control" id="instructors-in-`+ formLength +`">
+
                                 <span class="input-group-addon">
                                     <span>
                                         <span  onclick="addInstructor('instructors',this)" class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +` />
