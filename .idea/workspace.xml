@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="95dbd7e8-d220-48b8-80bd-b26f1731a0a4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/static/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -37,8 +36,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="173" column="60" selection-start-line="173" selection-start-column="60" selection-end-line="173" selection-end-column="60" />
+            <state relative-caret-position="15">
+              <caret line="161" column="32" lean-forward="true" selection-start-line="161" selection-start-column="32" selection-end-line="161" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -46,8 +45,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+            <state relative-caret-position="15">
+              <caret line="6" column="31" lean-forward="true" selection-start-line="6" selection-end-line="7" />
             </state>
           </provider>
         </entry>
@@ -83,8 +82,9 @@
       <find>act</find>
       <find>add</find>
       <find>select co</find>
-      <find>stu</find>
       <find>St</find>
+      <find>Year</find>
+      <find>stu</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -264,15 +264,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/static/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+        <state relative-caret-position="15">
+          <caret line="6" column="31" lean-forward="true" selection-start-line="6" selection-end-line="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="173" column="60" selection-start-line="173" selection-start-column="60" selection-end-line="173" selection-end-column="60" />
+        <state relative-caret-position="15">
+          <caret line="161" column="32" lean-forward="true" selection-start-line="161" selection-start-column="32" selection-end-line="161" selection-end-column="32" />
         </state>
       </provider>
     </entry>
