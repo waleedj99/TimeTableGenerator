@@ -36,10 +36,11 @@ function addCourse(divName,addBtn){
     if (addBtn.className.includes("glyphicon-plus")) {
         addBtn.className = "input-group-append  glyphicon glyphicon-minus"
         var newDiv = document.createElement('div')
-        newDiv.innerHTML = ` <div class="form-group" id="courses-`+ formLength + `">
-                    <div class="col-lg-12 ">
-                        <div class="input-group form-group">
-                            <input type="text" class="input-group-addon form-control" id="courses">
+        newDiv.className = 'form-group'
+        newDiv.id = "courses-"+ formLength + ""
+        newDiv.innerHTML = ` <div class="col-lg-12 ">
+                            <div class="input-group form-group">
+                            <input type="text" class="course-list input-group-addon form-control" id="courses-in-`+ formLength +`">
                                 <span class="input-group-addon">
                                     <span>
                                         <span  onclick="addCourse('courses',this)" class="input-group-append glyphicon glyphicon-plus" id=`+ formLength++ +` />
@@ -47,8 +48,7 @@ function addCourse(divName,addBtn){
                                 </span>
                             </input>
                         </div>
-                    </div>
-                </div>`
+                    </div>`
         document.getElementById(divName+'-main').appendChild(newDiv)
     }
     
@@ -68,8 +68,8 @@ function addInfo(divName, addBtn) {
         newDiv.innerHTML = `
                     <div class="col-lg-12 ">
                         <div class="input-group form-group">
-                            <input placeholder = "Year" type="text" class="input-group-addon form-control" id="courses">
-                            <input placeholder="Section" type="text" class="input-group-addon form-control" id="courses">
+                            <input placeholder = "Year" type="text" class="year-list input-group-addon form-control"name="year-in-0" id="year-in-0">
+                            <input placeholder="Section" type="text" class="section-list input-group-addon form-control" name="section-in-0" id="section-in-0">
                             <span class="input-group-addon">
                                 <span>
                                     <span onclick="addInfo('sinfo',this)"
