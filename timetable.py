@@ -103,6 +103,11 @@ class Data:
 
         print('Endtime={}'.format(start_time + timedelta(hours=duration)))
         for i in range(Data.periods_per_day):
+
+            # Break after 3 classes
+            if i != 0 and i % 3 == 0:
+                start_time += timedelta(hours=duration)
+
             period = "{}-{}".format(datetime.strftime(start_time, "%H:%M"),
                                     datetime.strftime(start_time + timedelta(hours=duration), "%H:%M"))
             Data._periods.append(period)
@@ -383,8 +388,9 @@ class Driver:
             room = Data.rooms[(i * len(Data.rooms) // best_chromosome.chromosome_len) % len(Data.rooms)]
             period = i % Data.periods_per_day
             period_str = Data._periods[period]
-            stg = '-' if class_.student_group is None else class_.student_group.name
-            res.append({'day': day, 'period': period_str, 'student_group': stg, 'room': room.name})
+            stg = class_.student_group
+            if stg is not None:
+                res.append({'day': day, 'period': period_str, 'student_group': stg.name, 'room': room.name})
         print(res)
         return res
 
@@ -401,9 +407,9 @@ if __name__ == '__main__':
     room0 = Room("201")
     room1 = Room("202")
 
-    stg0 = StudentGroup("CSED")
-    stg1 = StudentGroup("CSED")
-    stg2 = StudentGroup("CSED")
+    stg0 = StudentGroup("CS-A")
+    stg1 = StudentGroup("CS-B")
+    stg2 = StudentGroup("CS-C")
 
     c0 = Class(course=course0, type="Lec", instructor=ins0, student_group=stg0, allowed_room=room0)
     c1 = Class(course=course0, type="Lec", instructor=ins0, student_group=stg0, allowed_room=room0)
