@@ -67,9 +67,9 @@ def home():
             driver = Driver()
             ans = driver.generate_timetable()
             res = driver.generate_timetable_response(ans)
-            res = [{'error': False, 'periods_per_day': ppd, 'days_per_week': len(received_data['working_data'])}] + res
+            res = res
         except Exception:
-            res = [{'error': True}]
+            pass
 
         finally:
             return jsonify(res)

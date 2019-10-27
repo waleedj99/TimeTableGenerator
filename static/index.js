@@ -109,12 +109,76 @@ let student_groups = []
         }).done(function(res){
             console.log(res)
             $(this).text("Submit")
+            console.log(res)
+            generateTable(res)
         });
 
     })
 
 })
 
+function generateTable(data) {
+
+    var lookup = {};
+    var items = data
+    var result = [];
+
+    for (var item, i = 0; item = items[i++];) {
+        var name = item.student_group;
+
+        if (!(name in lookup)) {
+            if (name === undefined) {
+                continue
+            }
+            lookup[name] = 1;
+            result.push(name);
+        }
+    }
+
+
+    console.log(result)
+
+    for (let i = 0; i < result.length; i++) {
+        $('body').append(
+            `<table align ="center" style="border:solid" id = "` + result[i] + `">
+               <h3 align="center"> `+ result[i] + `
+            </h3> </table>`
+        )
+    }
+    var days_list = []
+    lookup = {};
+    for (var item, i = 0; item = items[i++];) {
+        var name = item.day;
+
+        if (!(name in lookup)) {
+            if (name === undefined) {
+                continue
+            }
+            lookup[name] = 1;
+            days_list.push(name);
+        }
+    }
+
+
+    result.forEach(className => {
+        days_list.forEach(day => {
+            $('#' + className).append(`<tr id = "day-` + day + '-' + className + `">
+                <td>
+                <b> `+ day + `</b>
+                </td> 
+             </tr>`)
+
+        })
+
+    })
+    data.forEach(dataItem => {
+        $('#day-' + dataItem.day + '-' + dataItem.student_group).append(
+            `<td id = "sub-` + dataItem.course + `"> 
+                         `+ dataItem.course + `
+                    </td>`
+        )
+    })
+}
    function addCourse(divName,addBtn){
     var formLength = document.getElementById(divName + '-main').childElementCount
     console.log(addBtn.id)
