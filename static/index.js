@@ -76,6 +76,9 @@ let student_groups = []
             student_groups.push(year_list[i]+ '-' + section_list[i])
             
         }
+        $('#result-body').html("")
+
+
         console.log("Student Group" + student_groups)
         console.log(duration)
         console.log(new_days)
@@ -108,9 +111,10 @@ let student_groups = []
             contentType: 'application/json;charset=UTF-8',
         }).done(function(res){
             console.log(res)
-            $(this).text("Submit")
+            $('#submit-btn').text("Submit")
             console.log(res)
             generateTable(res)
+
         });
 
     })
@@ -118,7 +122,7 @@ let student_groups = []
 })
 
 function generateTable(data) {
-
+    console.log(data)
     var lookup = {};
     var items = data
     var result = [];
@@ -137,10 +141,11 @@ function generateTable(data) {
 
 
     console.log(result)
-
+    $('#result-body').html("")
     for (let i = 0; i < result.length; i++) {
-        $('body').append(
-            `<table align ="center" style="border:solid" id = "` + result[i] + `">
+
+        $('#result-body').append(
+            `<table class="container" align ="center" style="border:solid" id = "` + result[i] + `">
                <h3 align="center"> `+ result[i] + `
             </h3> </table>`
         )
@@ -162,8 +167,8 @@ function generateTable(data) {
 
     result.forEach(className => {
         days_list.forEach(day => {
-            $('#' + className).append(`<tr id = "day-` + day + '-' + className + `">
-                <td>
+            $('#' + className).append(`<tr class="row" id = "day-` + day + '-' + className + `">
+                <td class="col">
                 <b> `+ day + `</b>
                 </td> 
              </tr>`)
@@ -173,7 +178,7 @@ function generateTable(data) {
     })
     data.forEach(dataItem => {
         $('#day-' + dataItem.day + '-' + dataItem.student_group).append(
-            `<td id = "sub-` + dataItem.course + `"> 
+            `<td class="col" id = "sub-` + dataItem.course + `">
                          `+ dataItem.course + `
                     </td>`
         )
