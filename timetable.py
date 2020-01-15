@@ -1,490 +1,301 @@
-import random
 import math
-from datetime import datetime, timedelta
-
-
-class StudentGroup:
-    count = 0
-
-    def __init__(self, name):
-        self.name = name
-        self.id = StudentGroup.count
-        StudentGroup.count += 1
+import random
+import copy
 
 
 class Room:
-    count = 0
-
     def __init__(self, name):
         self.name = name
-        self.id = Room.count
-        Room.count += 1
+
+    def __hash__(self):
+        return hash(self.name)
+
+    def __repr__(self):
+        return str(self.name)
 
 
-class Instructor:
-    count = 0
-
-    def __init__(self, fullname):
-        self.fullname = fullname
-        self.id = Instructor.count
-        Instructor.count += 1
-
-
-class Course:
-
-    def __init__(self, name: str, code: str):
+class Teacher:
+    def __init__(self, name):
         self.name = name
-        self.code = code
+
+    def __hash__(self):
+        return hash(self.name)
+
+    def __repr__(self):
+        return str(self.name)
+
+
+class Subject:
+    def __init__(self, name):
+        self.name = name
+
+    def __hash__(self):
+        return hash(self.name)
+
+    def __repr__(self):
+        return str(self.name)
+
+    @staticmethod
+    def random_subject(classes_per_sub, subject_list, class_times_list, day_list):
+        prob_not_empty = (classes_per_sub*len(subject_list)) / \
+            ((len(class_times_list)*len(day_list)))
+        if random.uniform(0, 1) < prob_not_empty:
+            return Subject(random.choice(subject_list))
+        else:
+            return Subject("empty")
 
 
 class Class:
-    count = 0
-
-    def __init__(self, id=None, course=None, type=None, instructor=None, student_group=None, allowed_room=None):
-        if id is not None:
-            self.id = id
-        else:
-            self.id = Class.count
-            Class.count += 1
-        self.course = course
-        self.type = type
-        self.instructor = instructor
-        self.student_group = student_group
-        self.allowed_room = allowed_room
-
-    def is_room_allowed(self, room_id):
-        if self.id == -1:
-            return False
-        return self.allowed_room.id == room_id
+    def __init__(self, std_grp=None, subject=None, teacher=None, room=None):
+        self.std_grp = std_grp
+        self.subject = subject
+        self.teacher = teacher
+        self.room = room
 
     def __str__(self):
-        str_val = "Class id={}| course={}, type={}, instructor={}, student_group={}, allowed_room={}".format(self.id,
-                                                                                                             self.course.name,
-                                                                                                             self.type,
-                                                                                                             self.instructor.fullname,
-                                                                                                             self.student_group.name,
-                                                                                                             self.allowed_room.name)
-        return str_val
+        return str(self.subject)+" "+str(self.std_grp)+" "+str(self.teacher)+" "+str(self.room)
+
+    def __repr__(self):
+        return str(self.subject)+" "+str(self.std_grp)+" "+str(self.teacher)+" "+str(self.room)
 
 
-class Data:
-    student_groups = []
-    instructors = []
-    rooms = []
-    courses = []
-    periods_per_day = 0
-    days_per_week = 0
-    working_days = []
-    classes = []
-    _periods = []
+class TimeTable:
+    def __init__(self, day_list, class_times_list, std_grp_list, room_list, subject_list, teacher_list):
+        self.n_days = len(day_list)
+        self.n_class_per_day = len(class_times_list)
+        self.n_std_grps = len(std_grp_list)
 
-    @staticmethod
-    def set_working_days(days_dict):
-        Data.working_days = []
-        days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-        for d in days:
-            if days_dict.get(d):
-                Data.days_per_week += 1
-                Data.working_days.append(d.capitalize())
+        self.per_subject_count = 3
+        self.day_list = day_list
+        self.class_timings_list = class_times_list
+        self.std_grp_list = std_grp_list
+        self.room_list = room_list
+        self.subject_list = subject_list
+        self.teacher_list = teacher_list
+        self.timetable = [[[Class(std_grp=std_grp_list[stg], subject=Subject.random_subject(self.per_subject_count, self.subject_list, self.class_timings_list, self.day_list), teacher=self.random_teacher(teacher_list), room=self.random_room(room_list)) for stg in range(self.n_std_grps)]
+                           for j in range(self.n_class_per_day)] for i in range(self.n_days)]
 
     @staticmethod
-    def set_classes(classes):
-        Data.classes = classes
+    def random_room(room_list):
+        return Room(random.choice(room_list))
 
     @staticmethod
-    def get_class(id):
-        for c in Data.classes:
-            if c.id == id:
-                return c
-        return Class(-1)
+    def random_teacher(teacher_list):
+        return Teacher(random.choice(teacher_list))
 
-    @staticmethod
-    def get_room(id):
-        for r in Data.rooms:
-            if r.id == id:
-                return r
-        return None
-
-    @staticmethod
-    def set_periods(start_time_str, duration):
-        start_time = datetime.strptime(start_time_str, "%H:%M")
-        print('Starttime={}'.format(start_time))
-
-        print('Endtime={}'.format(start_time + timedelta(hours=duration)))
-        for i in range(Data.periods_per_day):
-
-            # Break after 3 classes
-            if i != 0 and i % 3 == 0:
-                start_time += timedelta(hours=duration)
-
-            period = "{}-{}".format(datetime.strftime(start_time, "%H:%M"),
-                                    datetime.strftime(start_time + timedelta(hours=duration), "%H:%M"))
-            Data._periods.append(period)
-            start_time += timedelta(hours=duration)
-        print('{} periods'.format(Data.periods_per_day))
-
-
-class Chromosome:
-
-    def __init__(self, pick_initial_slots: bool):
-        self.chromosome_len = Data.days_per_week * Data.periods_per_day * len(Data.rooms)
-        self.slots = [-1] * self.chromosome_len
-        self.assigned_slots = {}  # <class_id, slot_id>
-        self.fitness = 0
-        if pick_initial_slots:
-            for i in range(len(Data.classes)):
-
-                slot_id = random.randint(0, self.chromosome_len - 1)
-
-                # Find an empty slot
-                while self.slots[slot_id] != -1:
-                    slot_id = random.randint(0, self.chromosome_len - 1)
-                class_id = Data.classes[i].id
-                self.slots[slot_id] = class_id
-                self.assigned_slots[class_id] = slot_id
-
-    def calculate_fitness(self):
-        qs = 0
-        for k, v in self.assigned_slots.items():
-            class_id = k
-            slot_id = v
-            qs += self.calculate_gene_score(class_id, slot_id)
-
-        self.fitness = qs / (3.0 * len(self.assigned_slots))
-
-    def calculate_gene_score(self, class_id, slot_id):
-        gs = 0
-        room_id = Data.rooms[(slot_id * len(Data.rooms) * Data.days_per_week // len(self.slots)) % len(Data.rooms)].id
-        if Data.get_class(class_id).is_room_allowed(room_id):
-            gs += 1
-        if self.instructor_available(slot_id):
-            gs += 1
-        if self.student_group_available(slot_id):
-            gs += 1
-        return gs
-
-    def set_gene(self, slot_id, class_id):
-        self.slots[slot_id] = class_id
-        if class_id != -1:
-            self.assigned_slots[class_id] = slot_id
-
-    def instructor_available(self, slot_id):
-        ins = Data.get_class(self.slots[slot_id]).instructor
-        instructor_cls_count = 0
-        k = slot_id % Data.periods_per_day
-        day_id = (slot_id * Data.days_per_week // self.chromosome_len) % Data.days_per_week
-        k += day_id * (self.chromosome_len // Data.days_per_week)
-        rc = len(Data.rooms)
-        for i in range(rc):
-            if self.slots[k] == -1:
-                continue
-            elif Data.get_class(self.slots[k]).instructor == ins:
-                instructor_cls_count += 1
-            k += Data.periods_per_day
-
-        return True if instructor_cls_count == 1 else False
-
-    def student_group_available(self, slot_id):
-        std_grp = Data.get_class(self.slots[slot_id]).student_group
-        student_group_count = 0
-        k = slot_id % Data.periods_per_day
-        day_id = (slot_id * Data.days_per_week // self.chromosome_len) % Data.days_per_week
-        k += day_id * (self.chromosome_len // Data.days_per_week)
-        rc = len(Data.rooms)
-        for i in range(rc):
-            if self.slots[k] == -1:
-                continue
-            elif Data.get_class(self.slots[k]).student_group == std_grp:
-                student_group_count += 1
-            k += Data.periods_per_day
-        return True if student_group_count == 1 else False
-
-    def __str__(self):
-        str_value = ""
-        for s in self.slots:
-            str_value = str_value + str(s) + " "
-        for k, v in self.assigned_slots.items():
-            class_id = str(k)
-            slot_id = str(v)
-            str_value = str_value + " | " + class_id + " " + slot_id + " | "
-        return str_value
-
-    def is_class_set(self, class_id):
-        return class_id in self.assigned_slots
-
-
-class Population:
-
-    def __init__(self, population_size):
-        self.population_size = population_size
-        self.population = []
-        self.best_fitness_score = 0
-        for i in range(population_size):
-            self.population.append(Chromosome(pick_initial_slots=True))
-
-    def get_fittest_chromosome(self):
-        max_val = -math.inf
-        max_idx = -1
-        for i in range(self.population_size):
-            if self.population[i].fitness > max_val:
-                max_val = self.population[i].fitness
-                max_idx = i
-        return self.population[max_idx]
-
-    def get_least_chromosome_index(self):
-        min_val = math.inf
-        min_idx = -1
-        for i in range(self.population_size):
-            if self.population[i].fitness < min_val:
-                min_val = self.population[i].fitness
-                min_idx = i
-        return min_idx
-
-    def get_second_fittest_chromosome(self):
-        max_idx = 0
-        smax_idx = 0
-
-        for i in range(self.population_size):
-            if self.population[i].fitness > self.population[max_idx].fitness:
-                max_idx = i
-            elif self.population[i].fitness > self.population[smax_idx].fitness:
-                smax_idx = i
-
-        return self.population[smax_idx]
-
-    def calculate_fitnesses(self):
-        for ch in self.population:
-            ch.calculate_fitness()
-        self.best_fitness_score = self.get_fittest_chromosome().fitness
-
-    def get_average_fitness(self):
-        total_score = 0
-        for ch in self.population:
-            total_score += ch.fitness
-        return total_score / self.population_size
-
-    def __str__(self):
-        str_val = ""
-        for c in self.population:
-            str_val += str(c)
-        str_val += 'average fitness: ' + str(self.get_average_fitness())
-        return str_val
-
-
-class Generator:
-
-    def __init__(self):
-        self.population = None
-        self.fitttest_chromosome = None
-        self.second_fittest_chromosome = None
-        self.offstring = None
-        self.population_size = 0
-
-    def init_population(self, population_size):
-        self.population_size = population_size
-        self.population = Population(population_size)
-
-    def selection(self):
-        self.fitttest_chromosome = self.population.get_fittest_chromosome()
-        self.second_fittest_chromosome = self.population.get_second_fittest_chromosome()
-
-    def crossover(self):
-        offspring = Chromosome(pick_initial_slots=False)
-        parent1 = self.fitttest_chromosome
-        parent2 = self.second_fittest_chromosome
-        for i in range(len(parent1.slots)):
-            parent1_gene = parent1.slots[i]
-            parent2_gene = parent2.slots[i]
-            if parent1_gene == parent2_gene:
-                if parent1_gene != -1:
-                    offspring.set_gene(i, parent1_gene)
-            elif parent1 == -1 and not offspring.is_class_set(parent2_gene):
-                offspring.set_gene(i, parent2_gene)
-
-            elif parent2 == -1 and not offspring.is_class_set(parent1_gene):
-                offspring.set_gene(i, parent1_gene)
-
-            else:
-                if offspring.is_class_set(parent2_gene) and not offspring.is_class_set(parent1_gene):
-                    offspring.set_gene(i, parent1_gene)
-
-                elif offspring.is_class_set(parent1_gene) and not offspring.is_class_set(parent2_gene):
-                    offspring.set_gene(i, parent2_gene)
-
-                elif offspring.is_class_set(parent1_gene) and offspring.is_class_set(parent2_gene):
-                    offspring.set_gene(i, -1)
-
-                else:
-                    parent2_gs = parent2.calculate_gene_score(parent2_gene, i)
-                    parent1_gs = parent2.calculate_gene_score(parent1_gene, i)
-                    if parent2_gs > parent1_gs:
-                        offspring.set_gene(i, parent2_gene)
-
+    def get_conflicts(self):
+        room_conflicts = 0
+        teacher_conflicts = 0
+        for i in range(self.n_days):
+            for j in range(self.n_class_per_day):
+                room_set = set()
+                teacher_set = set()
+                for k in range(self.n_std_grps):
+                    if self.timetable[i][j][k].subject.name != 'empty' and self.timetable[i][j][k].room in room_set:
+                        room_conflicts += 1
                     else:
-                        offspring.set_gene(i, parent1_gene)
+                        room_set.add(self.timetable[i][j][k].room)
+                    if self.timetable[i][j][k].subject.name != 'empty' and self.timetable[i][j][k].teacher in teacher_set:
+                        teacher_conflicts += 1
+                    else:
+                        room_set.add(self.timetable[i][j][k].teacher)
+        subjects_conflicts = 0
 
-        for i in range(len(Data.classes)):
-            if not offspring.is_class_set(Data.classes[i].id):
-                slot_id = random.randint(0, parent2.chromosome_len - 1)
-                while offspring.slots[slot_id] != -1:
-                    slot_id = random.randint(0, parent2.chromosome_len - 1)
-                offspring.set_gene(slot_id, Data.classes[i].id)
-        self.offstring = offspring
+        for k in range(self.n_std_grps):
+            sc = 0
+            subject_count = {}
+            for i in range(self.n_days):
+                for j in range(self.n_class_per_day):
+                    if not subject_count.get(self.timetable[i][j][k].subject.name):
+                        subject_count[self.timetable[i][j][k].subject.name] = 1
+                    else:
+                        subject_count[self.timetable[i]
+                                      [j][k].subject.name] += 1
+            for subject_name, subject_freq in subject_count.items():
 
-    def add_offspring(self):
-        least_fit_index = self.population.get_least_chromosome_index()
-        self.population.population[least_fit_index] = self.offstring
+                if subject_name != 'empty':
+                    # print('Subject={}, freq={}'.format(subject_name, subject_freq))
+                    sc = sc + abs(subject_freq-self.per_subject_count)
+            subjects_conflicts += sc
+        print('Subject conflicts={}, room conflicts={}, teacher conflicts={}'.format(
+            subjects_conflicts, room_conflicts, teacher_conflicts))
 
-    def mutation(self, mutation_rate):
-        for i in range(self.population_size):
+    def get_fitness(self):
+        """
+        Fitness is the inverse of the number of conflicts.
+        There are two types of conflicts:
+        1. Two student groups occupying the same room at the same time.
+        2. One teacher teaching two sets of student groups at the same time.
+        """
+        conflicts = 0
+        room_conflicts = 0
+        teacher_conflicts = 0
+        for i in range(self.n_days):
+            for j in range(self.n_class_per_day):
+                room_set = set()
+                teacher_set = set()
+                for k in range(self.n_std_grps):
+                    if self.timetable[i][j][k].subject.name != 'empty' and self.timetable[i][j][k].room in room_set:
+                        room_conflicts += 1
+                    else:
+                        room_set.add(self.timetable[i][j][k].room)
+                    if self.timetable[i][j][k].subject.name != 'empty' and self.timetable[i][j][k].teacher in teacher_set:
+                        teacher_conflicts += 1
+                    else:
+                        room_set.add(self.timetable[i][j][k].teacher)
+        subjects_conflicts = 0
 
-            if random.uniform(0, 1) <= mutation_rate:
-                slot_id = random.randint(0, self.population.population[0].chromosome_len - 1)
-                while self.population.population[i].slots[slot_id] != -1:
-                    slot_id = random.randint(0, self.population.population[0].chromosome_len - 1)
-                rand_class = random.randint(0, len(Data.classes) - 1)
-                class_id = Data.classes[rand_class].id
-                old_slot_id = self.population.population[i].assigned_slots[class_id]
-                self.population.population[i].set_gene(old_slot_id, -1)
-                self.population.population[i].set_gene(slot_id, class_id)
+        for k in range(self.n_std_grps):
+            sc = 0
+            subject_count = {}
+            for i in range(self.n_days):
+                for j in range(self.n_class_per_day):
+                    if not subject_count.get(self.timetable[i][j][k].subject.name):
+                        subject_count[self.timetable[i][j][k].subject.name] = 1
+                    else:
+                        subject_count[self.timetable[i]
+                                      [j][k].subject.name] += 1
+            for subject_name, subject_freq in subject_count.items():
 
-    def get_fittest_chromosome(self):
-        return self.fitttest_chromosome
-
-
-class Driver:
-    population_size = 20
-    max_generations = 2500
-    mutation_rate = 0.2
-
-    def generate_timetable(self):
-        gen = Generator()
-        gen.init_population(population_size=Driver.population_size)
-        gen.population.calculate_fitnesses()
-
-        print(str(gen.population))
-
-        generation_count = 0
-        print("Generation: {}, average_fitness: {}, max_fitnesss: {}".format(generation_count,
-                                                                             gen.population.get_average_fitness(),
-                                                                             gen.population.best_fitness_score))
-
-        while gen.population.best_fitness_score < 1 and generation_count < Driver.max_generations:
-            generation_count += 1
-
-            gen.selection()
-            gen.crossover()
-            gen.mutation(Driver.mutation_rate)
-            gen.add_offspring()
-
-            gen.population.calculate_fitnesses()
-
-            print(str(gen.population))
-
-            print("Generation: {}, average_fitness: {}, max_fitnesss: {}".format(generation_count,
-                                                                                 gen.population.get_average_fitness(),
-                                                                                 gen.population.best_fitness_score))
-        if abs(gen.population.best_fitness_score - 1.0) < 1e-9:
-            return gen.population.get_fittest_chromosome()
+                if subject_name != 'empty':
+                    # print('Subject={}, freq={}'.format(subject_name, subject_freq))
+                    sc = sc + abs(subject_freq-self.per_subject_count)
+            subjects_conflicts += sc
+        conflicts = subjects_conflicts+room_conflicts+teacher_conflicts
+        # print('Subject conf={}, room con={}, teacher conf={}'.format(subjects_conflicts, room_conflicts, teacher_conflicts))
+        if conflicts == 0:
+            return math.inf
         else:
-            # return None
-            return gen.population.get_fittest_chromosome()
+            return 1/conflicts
 
-    def generate_timetable_response(self, best_chromosome: Chromosome):
-        res = []
-        for i in range(best_chromosome.chromosome_len):
-            class_ = Data.get_class(i)
-            course = class_.course
-            day = Data.working_days[(i * Data.days_per_week // best_chromosome.chromosome_len) % Data.days_per_week]
-            room = Data.rooms[(i * len(Data.rooms) // best_chromosome.chromosome_len) % len(Data.rooms)]
-            period = i % Data.periods_per_day
-            period_str = Data._periods[period]
-            stg = class_.student_group
-            if stg is not None:
-                res.append({'day': day, 'period': period_str, 'student_group': stg.name, 'room': room.name,
-                            'course': course.name})
-        print(res)
-        return res
+    def mutate(self):
+        MUTATION_RATE = 0.05
+        for i in range(self.n_days):
+            for j in range(self.n_class_per_day):
+                for k in range(self.n_std_grps):
 
+                    if(random.uniform(0, 1) < MUTATION_RATE):
+                        self.timetable[i][j][k].room = Room(
+                            random.choice(self.room_list))
 
-if __name__ == '__main__':
-    course0 = Course("MATH", "101")
-    course1 = Course("CHEM", "103")
-    course2 = Course("PIC", "104")
-    course3 = Course("CAED", "105")
-    course4 = Course("ELN", "106")
-    course5 = Course("BCP", "107")
+                    if(random.uniform(0, 1) < MUTATION_RATE):
+                        self.timetable[i][j][k].teacher = Teacher(
+                            random.choice(self.teacher_list))
 
-    ins0 = Instructor("Padma")
-    ins1 = Instructor("Shiva")
-    ins2 = Instructor("Harish")
-    ins3 = Instructor("Shiv")
-    ins4 = Instructor("Shobha")
-    ins5 = Instructor("Rahul")
-    ins6 = Instructor("Meena")
-
-    ins7 = Instructor("Soumya")
-    ins8 = Instructor("Uma")
-    ins9 = Instructor("Deepak")
-    ins10 = Instructor("Dhruva")
-
-    room0 = Room("308")
-    room1 = Room("309")
-
-    stg0 = StudentGroup("1A")
-    stg1 = StudentGroup("1B")
-
-    c0 = Class(course=course0, type="Lec", instructor=ins0, student_group=stg0, allowed_room=room0)
-    c1 = Class(course=course0, type="Lec", instructor=ins0, student_group=stg0, allowed_room=room0)
-    c2 = Class(course=course0, type="Lec", instructor=ins0, student_group=stg0, allowed_room=room0)
-    c3 = Class(course=course1, type="Lec", instructor=ins1, student_group=stg0, allowed_room=room0)
-    c4 = Class(course=course1, type="Lec", instructor=ins1, student_group=stg0, allowed_room=room0)
-    c5 = Class(course=course1, type="Lec", instructor=ins1, student_group=stg0, allowed_room=room0)
-    c6 = Class(course=course2, type="Lec", instructor=ins2, student_group=stg0, allowed_room=room0)
-    c7 = Class(course=course2, type="Lec", instructor=ins2, student_group=stg0, allowed_room=room0)
-    c8 = Class(course=course2, type="Lec", instructor=ins2, student_group=stg0, allowed_room=room0)
-    c9 = Class(course=course3, type="Lec", instructor=ins3, student_group=stg0, allowed_room=room0)
-    c10 = Class(course=course3, type="Lec", instructor=ins3, student_group=stg0, allowed_room=room0)
-    c11 = Class(course=course3, type="Lec", instructor=ins3, student_group=stg0, allowed_room=room0)
-    c12 = Class(course=course4, type="Lec", instructor=ins4, student_group=stg0, allowed_room=room0)
-    c13 = Class(course=course4, type="Lec", instructor=ins4, student_group=stg0, allowed_room=room0)
-    c14 = Class(course=course4, type="Lec", instructor=ins4, student_group=stg0, allowed_room=room0)
-    c15 = Class(course=course5, type="Lec", instructor=ins6, student_group=stg0, allowed_room=room0)
-    c16 = Class(course=course5, type="Lec", instructor=ins6, student_group=stg0, allowed_room=room0)
-    c17 = Class(course=course5, type="Lec", instructor=ins6, student_group=stg0, allowed_room=room0)
-
-    c18 = Class(course=course0, type="Lec", instructor=ins0, student_group=stg1, allowed_room=room1)
-    c19 = Class(course=course0, type="Lec", instructor=ins0, student_group=stg1, allowed_room=room1)
-    c20 = Class(course=course0, type="Lec", instructor=ins0, student_group=stg1, allowed_room=room1)
-    c21 = Class(course=course1, type="Lec", instructor=ins7, student_group=stg1, allowed_room=room1)
-    c22 = Class(course=course1, type="Lec", instructor=ins7, student_group=stg1, allowed_room=room1)
-    c23 = Class(course=course1, type="Lec", instructor=ins7, student_group=stg1, allowed_room=room1)
-    c24 = Class(course=course2, type="Lec", instructor=ins8, student_group=stg1, allowed_room=room1)
-    c25 = Class(course=course2, type="Lec", instructor=ins8, student_group=stg1, allowed_room=room1)
-    c26 = Class(course=course2, type="Lec", instructor=ins8, student_group=stg1, allowed_room=room1)
-    c27 = Class(course=course3, type="Lec", instructor=ins9, student_group=stg1, allowed_room=room1)
-    c28 = Class(course=course3, type="Lec", instructor=ins9, student_group=stg1, allowed_room=room1)
-    c29 = Class(course=course3, type="Lec", instructor=ins9, student_group=stg1, allowed_room=room1)
-    c30 = Class(course=course4, type="Lec", instructor=ins10, student_group=stg1, allowed_room=room1)
-    c31 = Class(course=course4, type="Lec", instructor=ins10, student_group=stg1, allowed_room=room1)
-    c32 = Class(course=course4, type="Lec", instructor=ins10, student_group=stg1, allowed_room=room1)
-    c33 = Class(course=course5, type="Lec", instructor=ins6, student_group=stg1, allowed_room=room1)
-    c34 = Class(course=course5, type="Lec", instructor=ins6, student_group=stg1, allowed_room=room1)
-    c35 = Class(course=course5, type="Lec", instructor=ins6, student_group=stg1, allowed_room=room1)
+                    if(random.uniform(0, 1) < MUTATION_RATE):
+                        self.timetable[i][j][k].subject = Subject.random_subject(
+                            self.per_subject_count, self.subject_list, self.class_timings_list, self.day_list)
 
 
-    Data.courses = [course0, course1]
-    Data.set_working_days({'monday': True, 'tuesday': True, 'wednesday': True, 'thursday': True, 'friday': True,
-                           'saturday': True})
-    Data.rooms = [room0, room1]
-    Data.instructors = [ins0, ins1, ins2, ins3, ins4, ins5, ins6, ins7, ins8, ins9, ins10]
-    Data.student_groups = [stg0, stg1]
-    Data.set_classes(
-        [c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c12, c14, c15, c16, c18, c19, c20, c21, c22, c23, c24,
-         c25, c26, c27, c28, c29, c30, c32, c33, c34])
-    Data.periods_per_day = 6
-    Data.set_periods("9:00", 1)
+# TODO: Start from here tmrw
+class GeneticAlgorithm:
 
-    driver = Driver()
-    ans = driver.generate_timetable()
-    driver.generate_timetable_response(ans)
+    def __init__(self, n_days, n_class_per_day):
+        self.population = None
+        self.n_days = n_days
+        self.n_class_per_day = n_class_per_day
+        self.population_size = 20
+        self.n_generations = 100
+        self.crossover_prob = 0.75
+
+    def generate_init_population(self, day_list, class_list, std_grp_list, subject_list, room_list, teacher_list):
+        self.population = [TimeTable(day_list, class_list, std_grp_list, room_list,
+                                     subject_list, teacher_list) for i in range(self.population_size)]
+
+    def get_fittest(self):
+        max_fitness = -math.inf
+        fittest = None
+        for timetable in self.population:
+            fitness = timetable.get_fitness()
+            if fitness > max_fitness:
+                max_fitness = fitness
+                fittest = timetable
+        return fittest
+
+    def get_least_fittest_index(self):
+        min_fitness = math.inf
+        least_fit_index = None
+        for i in range(len(self.population)):
+            timetable = self.population[i]
+            fitness = timetable.get_fitness()
+            if fitness < min_fitness:
+                min_fitness = fitness
+                least_fit_index = i
+        return least_fit_index
+
+    def get_second_fittest(self):
+        max_fitness = -math.inf
+        second_fittest = None
+        fittest = self.get_fittest()
+
+        for timetable in self.population:
+            fitness = timetable.get_fitness()
+            if fitness > max_fitness and fittest != second_fittest:
+                max_fitness = fitness
+                second_fittest = timetable
+        return second_fittest
+
+    def avg_fitness(self):
+        avg = 0
+        for t in self.population:
+            avg += t.get_fitness()
+        return avg/self.population_size
+
+    def run_algorithm(self, day_list, class_list, std_grp_list, subject_list, room_list, teacher_list):
+        self.generate_init_population(
+            day_list, class_list, std_grp_list, subject_list, room_list, teacher_list)
+        for g in range(self.n_generations):
+            # Selection
+            new_population = []
+            new_population.append(self.get_fittest())
+            while len(new_population)<self.population_size:
+                parent1 = self.get_fittest()
+                parent2 = self.get_second_fittest()
+                # Crossover
+                if(random.uniform(0, 1) < self.crossover_prob):
+                    offspring = self.crossover(parent1, parent2)
+                else:
+                    offspring = copy.deepcopy(parent1)
+                # Mutation
+                offspring.mutate()
+                new_population.append(offspring)
+
+            self.population = new_population
+            f = self.get_fittest().get_fitness()
+            
+            print('Generation {}. Max fitness={}, avg fitness={}'.format(g,
+                                                                         f, self.avg_fitness()))
+            if f == math.inf:
+                print('Reached max fitness at generation {}, stopping..'.format(g))
+                return self.get_fittest()
+
+        return self.get_fittest()
+
+    def crossover(self, timetable1: TimeTable, timetable2: TimeTable):
+        # Randomly copy over some genes from either chromosome and return a new one
+        timetable_crossed = TimeTable(
+            timetable1.day_list, timetable1.class_timings_list, timetable1.std_grp_list, timetable1.room_list, timetable1.subject_list, timetable1.subject_list)
+        for i in range(timetable1.n_days):
+            for j in range(timetable1.n_class_per_day):
+                for k in range(timetable1.n_std_grps):
+                    if bool(random.getrandbits(1)):
+                        timetable_crossed.timetable[i][j][k].room = timetable1.timetable[i][j][k].room
+                    else:
+                        timetable_crossed.timetable[i][j][k].room = timetable2.timetable[i][j][k].room
+
+                    if bool(random.getrandbits(1)):
+                        timetable_crossed.timetable[i][j][k].subject = timetable1.timetable[i][j][k].subject
+                    else:
+                        timetable_crossed.timetable[i][j][k].subject = timetable2.timetable[i][j][k].subject
+
+                    if bool(random.getrandbits(1)):
+                        timetable_crossed.timetable[i][j][k].teacher = timetable1.timetable[i][j][k].teacher
+                    else:
+                        timetable_crossed.timetable[i][j][k].teacher = timetable2.timetable[i][j][k].teacher
+        return timetable_crossed
+
+
+ga = GeneticAlgorithm(5, 8)
+fittest = ga.run_algorithm(['Mon', 'Tues', 'Wed', 'Thurs', 'Fri'], ['9-10', '10-11', '11-12', '12-13', '13-14', '14-15', '15-16', '16-17'], ['A', 'B', 'C'], ['math',
+                                                                                                                                                              'science', 'social', 'history', 'english', 'hindi', 'computers'], ['400', '401', '402', '404', '405'], ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10'])
+print(fittest.timetable)
