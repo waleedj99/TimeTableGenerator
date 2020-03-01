@@ -98,7 +98,7 @@ class TimeTable:
                     if self.timetable[i][j][k].subject.name != 'empty' and self.timetable[i][j][k].teacher in teacher_set:
                         teacher_conflicts += 1
                     else:
-                        room_set.add(self.timetable[i][j][k].teacher)
+                        teacher_set.add(self.timetable[i][j][k].teacher)
         subjects_conflicts = 0
 
         for k in range(self.n_std_grps):
@@ -142,7 +142,7 @@ class TimeTable:
                     if self.timetable[i][j][k].subject.name != 'empty' and self.timetable[i][j][k].teacher in teacher_set:
                         teacher_conflicts += 1
                     else:
-                        room_set.add(self.timetable[i][j][k].teacher)
+                        teacher_set.add(self.timetable[i][j][k].teacher)
         subjects_conflicts = 0
 
         for k in range(self.n_std_grps):
@@ -274,7 +274,7 @@ class GeneticAlgorithm:
     def crossover(self, timetable1: TimeTable, timetable2: TimeTable):
         # Randomly copy over some genes from either chromosome and return a new one
         timetable_crossed = TimeTable(
-            timetable1.day_list, timetable1.class_timings_list, timetable1.std_grp_list, timetable1.room_list, timetable1.subject_list, timetable1.subject_list)
+            timetable1.day_list, timetable1.class_timings_list, timetable1.std_grp_list, timetable1.room_list, timetable1.subject_list, timetable1.teacher_list)
         for i in range(timetable1.n_days):
             for j in range(timetable1.n_class_per_day):
                 for k in range(timetable1.n_std_grps):
