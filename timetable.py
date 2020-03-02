@@ -296,6 +296,25 @@ class GeneticAlgorithm:
 
 
 ga = GeneticAlgorithm(5, 8)
-fittest = ga.run_algorithm(['Mon', 'Tues', 'Wed', 'Thurs', 'Fri'], ['9-10', '10-11', '11-12', '12-13', '13-14', '14-15', '15-16', '16-17'], ['A', 'B', 'C'], ['math',
-                                                                                                                                                              'science', 'social', 'history', 'english', 'hindi', 'computers'], ['400', '401', '402', '404', '405'], ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10'])
-print(fittest.timetable)
+fittest = ga.run_algorithm(['Mon', 'Tues', 'Wed', 'Thurs', 'Fri'], ['9-10', '10-11', '11-12', '12-13', '13-14', '14-15', '15-16', '16-17'], ['A', 'B', 'C'], ['math','science', 'social', 'history', 'english', 'hindi', 'computers'], ['400', '401', '402', '404', '405'], ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10'])
+# class_dic  = {}
+
+# for clname in fittest.std_grp_list:
+#     #class_dic[clname] = day_dic
+#     class_dic[clname] = {}
+#     for day in fittest.day_list:
+#         #day_dic[day] = period_dic
+#         class_dic[clname][day] ={}
+#         for pnum in fittest.class_timings_list:
+#             class_dic[clname][day][pnum]={}
+#             #period_dic[pnum] = {}
+
+# for index1,day in enumerate(fittest.timetable): 
+#     for index2,period in enumerate(day):
+#         for index3,cl in enumerate(period):
+#             subject,clname = str(fittest.timetable[index1][index2][index3]).split(' ')[0:2]
+#             class_dic[clname][fittest.day_list[index1]][fittest.class_timings_list[index2]] = {'subject':subject,'d':fittest.day_list[index1]}
+#             #print(fittest.day_list[index1],[fittest.class_timings_list[index2]],subject,clname)
+            
+#             #class_dic[clname].update({fittest.day_list[index1]:{}})
+#             #class_dic[clname][fittest.day_list[index1]].update({fittest.class_timings_list[index3]:subject})
