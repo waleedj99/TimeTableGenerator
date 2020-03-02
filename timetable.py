@@ -98,7 +98,7 @@ class TimeTable:
                     if self.timetable[i][j][k].subject.name != 'empty' and self.timetable[i][j][k].teacher in teacher_set:
                         teacher_conflicts += 1
                     else:
-                        room_set.add(self.timetable[i][j][k].teacher)
+                        teacher_set.add(self.timetable[i][j][k].teacher)
         subjects_conflicts = 0
 
         for k in range(self.n_std_grps):
@@ -142,7 +142,7 @@ class TimeTable:
                     if self.timetable[i][j][k].subject.name != 'empty' and self.timetable[i][j][k].teacher in teacher_set:
                         teacher_conflicts += 1
                     else:
-                        room_set.add(self.timetable[i][j][k].teacher)
+                        teacher_set.add(self.timetable[i][j][k].teacher)
         subjects_conflicts = 0
 
         for k in range(self.n_std_grps):
@@ -274,7 +274,7 @@ class GeneticAlgorithm:
     def crossover(self, timetable1: TimeTable, timetable2: TimeTable):
         # Randomly copy over some genes from either chromosome and return a new one
         timetable_crossed = TimeTable(
-            timetable1.day_list, timetable1.class_timings_list, timetable1.std_grp_list, timetable1.room_list, timetable1.subject_list, timetable1.subject_list)
+            timetable1.day_list, timetable1.class_timings_list, timetable1.std_grp_list, timetable1.room_list, timetable1.subject_list, timetable1.teacher_list)
         for i in range(timetable1.n_days):
             for j in range(timetable1.n_class_per_day):
                 for k in range(timetable1.n_std_grps):
@@ -297,24 +297,3 @@ class GeneticAlgorithm:
 
 ga = GeneticAlgorithm(5, 8)
 fittest = ga.run_algorithm(['Mon', 'Tues', 'Wed', 'Thurs', 'Fri'], ['9-10', '10-11', '11-12', '12-13', '13-14', '14-15', '15-16', '16-17'], ['A', 'B', 'C'], ['math','science', 'social', 'history', 'english', 'hindi', 'computers'], ['400', '401', '402', '404', '405'], ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10'])
-# class_dic  = {}
-
-# for clname in fittest.std_grp_list:
-#     #class_dic[clname] = day_dic
-#     class_dic[clname] = {}
-#     for day in fittest.day_list:
-#         #day_dic[day] = period_dic
-#         class_dic[clname][day] ={}
-#         for pnum in fittest.class_timings_list:
-#             class_dic[clname][day][pnum]={}
-#             #period_dic[pnum] = {}
-
-# for index1,day in enumerate(fittest.timetable): 
-#     for index2,period in enumerate(day):
-#         for index3,cl in enumerate(period):
-#             subject,clname = str(fittest.timetable[index1][index2][index3]).split(' ')[0:2]
-#             class_dic[clname][fittest.day_list[index1]][fittest.class_timings_list[index2]] = {'subject':subject,'d':fittest.day_list[index1]}
-#             #print(fittest.day_list[index1],[fittest.class_timings_list[index2]],subject,clname)
-            
-#             #class_dic[clname].update({fittest.day_list[index1]:{}})
-#             #class_dic[clname][fittest.day_list[index1]].update({fittest.class_timings_list[index3]:subject})
