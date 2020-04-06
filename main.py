@@ -1,10 +1,25 @@
 from flask import Flask, request, render_template, jsonify
-
+from collections import OrderedDict 
 import json
 import random
 import itertools
+from flask import send_file , make_response
+from flask_cors import CORS, cross_origin
 app = Flask(__name__)
+CORS(app)
 
+
+def _build_cors_prelight_response():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "*")
+    response.headers.add("Access-Control-Allow-Methods", "*")
+    return response
+
+def _corsify_actual_response(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.mimetype = "application/pdf"
+    return response
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -12,30 +27,39 @@ def home():
         return render_template('index.html')
     else:
         pass
+
 @app.route('/g', methods=['GET', 'POST'])
 def get():
-    if request.method == 'GET':
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_prelight_response()
+    if request.method == 'POST':
         from timetable import GeneticAlgorithm
-        ga = GeneticAlgorithm(5, 8)
-        fittest = ga.run_algorithm(['Mon', 'Tues', 'Wed', 'Thurs', 'Fri'], ['9-10', '10-11', '11-12', '12-13', '13-14', '14-15', '15-16', '16-17'], ['A', 'B', 'C'], ['math',
-                                                                                                                                                              'science', 'social', 'history', 'english', 'hindi', 'computers'], ['400', '401', '402', '404', '405'], ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10'])
-        class_dic  = {}
-
+        main_json = request.get_json()
+        print(main_json)
+        ga = GeneticAlgorithm(main_json['no_days'], main_json['no_classes'])
+        fittest = ga.run_algorithm(main_json['days_list'], main_json['time_list'], main_json['section_list'], main_json['subject_list'], ['400', '401', '402', '404', '405'], ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10'])
+        main_dic = OrderedDict()
+        class_dic = OrderedDict()  
         for clname in fittest.std_grp_list:
-            #class_dic[clname] = day_dic
-            class_dic[clname] = {}
+            #print(clname)
+            class_dic[clname] = OrderedDict()
             for day in fittest.day_list:
                 #day_dic[day] = period_dic
-                class_dic[clname][day] ={}
+                #print(day)
+                class_dic[clname][day] = OrderedDict()
                 for pnum in fittest.class_timings_list:
-                    class_dic[clname][day][pnum]={}
+                    #print(pnum)
+                    class_dic[clname][day][pnum]=OrderedDict()
                     #period_dic[pnum] = {}
 
         for index1,day in enumerate(fittest.timetable): 
             for index2,period in enumerate(day):
-                for index3,cl in enumerate(period):
-                    subject,clname,teacher,room = str(fittest.timetable[index1][index2][index3]).split(' ')[0:4]
+                for cl in period:
+                    subject,clname,teacher,room = str(cl).split(' ')[0:4]
                     class_dic[clname][fittest.day_list[index1]][fittest.class_timings_list[index2]] = {'subject':subject,'teacher':teacher,'room':room}
-        return(class_dic)
+        main_dic["time_table"] = class_dic
+        main_dic["days"] = fittest.day_list
+        main_dic["times"] = fittest.class_timings_list
+        return(json.dumps(main_dic))
 if __name__ == '__main__':
     app.run(debug=True)
