@@ -30,14 +30,14 @@ def home():
 
 @app.route('/g', methods=['GET', 'POST'])
 def get():
-    if request.method == "OPTIONS": # CORS preflight
-        return _build_cors_prelight_response()
     if request.method == 'POST':
+        
         from timetable import GeneticAlgorithm
         main_json = request.get_json()
-        print(main_json)
+        
         ga = GeneticAlgorithm(main_json['no_days'], main_json['no_classes'])
         fittest = ga.run_algorithm(main_json['days_list'], main_json['time_list'], main_json['section_list'], main_json['subject_list'], ['400', '401', '402', '404', '405'], ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10'])
+        print(fittest)
         main_dic = OrderedDict()
         class_dic = OrderedDict()  
         for clname in fittest.std_grp_list:
@@ -60,6 +60,7 @@ def get():
         main_dic["time_table"] = class_dic
         main_dic["days"] = fittest.day_list
         main_dic["times"] = fittest.class_timings_list
+        print(main_dic)
         return(json.dumps(main_dic))
 if __name__ == '__main__':
     app.run(debug=True)

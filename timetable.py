@@ -295,9 +295,5 @@ class GeneticAlgorithm:
         return timetable_crossed
 
 
-ga = GeneticAlgorithm(5, 8)
-fittest = ga.run_algorithm(['Mon', 'Tues', 'Wed', 'Thurs', 'Fri'], ['9-10', '10-11', '11-12', '12-13', '13-14', '14-15', '15-16', '16-17'], ['A', 'B', 'C'], ['math','science', 'social', 'history', 'english', 'hindi', 'computers'], ['400', '401', '402', '404', '405'], ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10'])
-print(fittest.timetable)
-print(fittest.std_grp_list)
-print(fittest.day_list)
-print(fittest.class_timings_list)
+# ga = GeneticAlgorithm(5, 8)
+# fittest = ga.run_algorithm(['Mon', 'Tues', 'Wed', 'Thurs', 'Fri'], ['9-10', '10-11', '11-12', '12-13', '13-14', '14-15', '15-16', '16-17'], ['A', 'B', 'C'], ['math','science', 'social', 'history', 'english', 'hindi', 'computers'], ['400', '401', '402', '404', '405'], ['t1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10'])
