@@ -15,7 +15,7 @@ def home():
         pass
 
 
-@app.route('/g', methods=['GET', 'POST'])
+@app.route('/generate', methods=['GET', 'POST'])
 def get():
     if request.method == 'POST':
         main_json = request.get_json()
@@ -23,10 +23,9 @@ def get():
         ga = GeneticAlgorithm(main_json['no_days'], main_json['no_classes'])
         fittest = ga.run_algorithm(main_json['days_list'], main_json['time_list'], main_json['subject_list'],
                                    main_json['rooms'], main_json['teacher_list'], main_json['student_groups'])
-        print(fittest)
         main_dic = OrderedDict()
         class_dic = OrderedDict()
-        for clname in fittest.std_grp_list:
+        for clname in range(len(fittest.student_groups)):
             # print(clname)
             class_dic[clname] = OrderedDict()
             for day in fittest.day_list:
@@ -37,13 +36,14 @@ def get():
                     # print(pnum)
                     class_dic[clname][day][pnum] = OrderedDict()
                     # period_dic[pnum] = {}
-
-        for index1, day in enumerate(fittest.timetable):
-            for index2, period in enumerate(day):
-                for cl in period:
-                    subject, clname, teacher, room = str(cl).split(' ')[0:4]
-                    class_dic[clname][fittest.day_list[index1]][fittest.class_timings_list[index2]] = {
-                        'subject': subject, 'teacher': teacher, 'room': room}
+        for k, sg in enumerate(fittest.student_groups):
+            for i, day in enumerate(fittest.day_list):
+                for j, cltime in enumerate(fittest.class_timings_list):
+                    subject = fittest.timetable[i][j][k].subject.name
+                    teacher = fittest.timetable[i][j][k].teacher.name
+                    room = fittest.timetable[i][j][k].room.name
+                    class_dic[k][day][cltime] = {
+                        'subject': "" if subject == 'empty' else subject, 'teacher': teacher, 'room': room}
         main_dic["time_table"] = class_dic
         main_dic["days"] = fittest.day_list
         main_dic["times"] = fittest.class_timings_list

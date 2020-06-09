@@ -7,5 +7,5 @@ Made for HashCode 2019
     npm install
     npm run build
     cd ../../..
-    python main.pq
+    python main.py
     
