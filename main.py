@@ -3,8 +3,8 @@ from collections import OrderedDict
 import json
 from timetable import GeneticAlgorithm
 
-app = Flask(__name__, static_folder='../TimeTableGen_FE/TimetableFE/time-table/build/static',
-            template_folder='../TimeTableGen_FE/TimetableFE/time-table/build')
+app = Flask(__name__, static_folder='./TimeTableGen_FE/TimetableFE/time-table/build/static',
+            template_folder='./TimeTableGen_FE/TimetableFE/time-table/build')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -19,10 +19,12 @@ def home():
 def get():
     if request.method == 'POST':
         main_json = request.get_json()
-
+        for sg in main_json['student_groups']:
+            sg['empty'] = '-'
         ga = GeneticAlgorithm(main_json['no_days'], main_json['no_classes'])
         fittest = ga.run_algorithm(main_json['days_list'], main_json['time_list'], main_json['subject_list'],
                                    main_json['rooms'], main_json['teacher_list'], main_json['student_groups'])
+
         main_dic = OrderedDict()
         class_dic = OrderedDict()
         for clname in range(len(fittest.student_groups)):
