@@ -1,6 +1,7 @@
 import math
 import random
 import copy
+import functools
 
 
 class Room:
@@ -114,6 +115,34 @@ class TimeTable:
     def random_teacher(teacher_list):
         return Teacher(random.choice(teacher_list))
 
+    def get_soft_conflicts(self):
+        # Constraint to reduce the number of gaps between classes.
+        # 0.1 Weight for soft constraints so its not getting superiority over hard constraints
+        gaps = 0
+
+        # Stores the max-min classes on each day of the week, for all student groups.
+        # If this value is minimum, the number of classes on each day are roughly uniform
+        diff_classes_sum = 0
+        for k in range(len(self.student_groups)):
+            max_cls = -math.inf
+            min_cls = math.inf
+            for i in range(self.n_days):
+                start = -1
+                n_cls = 0
+                for j in range(self.n_class_per_day):
+                    if self.timetable[i][j][k].subject.name != 'empty':
+                        if start == -1:
+                            start = i
+                        else:
+                            gaps += abs(j - start - 1)
+                            start = j
+
+                        n_cls += 1
+                max_cls = max(max_cls, n_cls)
+                min_cls = min(min_cls, n_cls)
+            diff_classes_sum += (max_cls - min_cls)
+        return gaps + diff_classes_sum
+
     def get_conflicts(self):
         room_conflicts = 0
         teacher_conflicts = 0
@@ -136,32 +165,31 @@ class TimeTable:
 
         for k in range(len(self.student_groups)):
             sc = 0
-            subject_count = {}
+            subject_count = {s: 0 for s in self.subject_list}
+            subject_count['empty'] = 0
             for i in range(self.n_days):
                 for j in range(self.n_class_per_day):
-                    if not subject_count.get(self.timetable[i][j][k].subject.name):
-                        subject_count[self.timetable[i][j][k].subject.name] = 1
-                    else:
-                        subject_count[self.timetable[i]
-                        [j][k].subject.name] += 1
+                    subject_count[self.timetable[i][j][k].subject.name] += 1
             for subject_name, subject_freq in subject_count.items():
-
                 if subject_name != 'empty':
                     # print('Subject={}, freq={}'.format(subject_name, subject_freq))
                     sc = sc + abs(subject_freq - self.per_subject_count)
             subjects_conflicts += sc
+
         teacher_student_group_conflicts = 0
         for k in range(len(self.student_groups)):
             for i in range(self.n_days):
                 for j in range(self.n_class_per_day):
                     cur_sub = self.timetable[i][j][k].subject
                     cur_teacher = self.timetable[i][j][k].teacher
-                    if cur_sub.name != 'empty' and self.student_groups[k][cur_sub] != cur_teacher:
+                    if self.student_groups[k][cur_sub] != cur_teacher:
                         teacher_student_group_conflicts += 1
 
-        # print(
-        #     'Subject conflicts={}, room conflicts={}, teacher conflicts={}, Teacher-student group conflicts={}'.format(
-        #         subjects_conflicts, room_conflicts, teacher_conflicts, teacher_student_group_conflicts))
+            # print(
+            #     'Subject conflicts={}, room conflicts={}, teacher conflicts={}, Teacher-student group conflicts={},'
+            #     ' gaps={}, diff={}'.format(
+            #         subjects_conflicts, room_conflicts, teacher_conflicts, teacher_student_group_conflicts, gaps,
+            #         diff_classes_sum))
         return subjects_conflicts + room_conflicts + teacher_conflicts + teacher_student_group_conflicts
 
     def get_fitness(self):
@@ -171,14 +199,14 @@ class TimeTable:
         1. Two student groups occupying the same room at the same time.
         2. One teacher teaching two sets of student groups at the same time.
         """
-        conflicts = self.get_conflicts()
-        if conflicts == 0:
-            return math.inf
-        else:
-            return 1 / conflicts
+        hard_conflicts = self.get_conflicts()
+        soft_conflicts = self.get_soft_conflicts()
+        hard_fitness = 1 / hard_conflicts if hard_conflicts != 0 else math.inf
+        soft_fitness = 1 / soft_conflicts if soft_conflicts != 0 else math.inf
+        return [hard_fitness, soft_fitness]
 
     def mutate(self):
-        mutation_rate = 0.04
+        mutation_rate = 0.05
         for i in range(self.n_days):
             for j in range(self.n_class_per_day):
                 for k in range(len(self.student_groups)):
@@ -229,7 +257,7 @@ class GeneticAlgorithm:
         self.population = None
         self.n_days = n_days
         self.n_class_per_day = n_class_per_day
-        self.population_size = 20
+        self.population_size = 100
         self.n_generations = 100
         self.crossover_prob = 0.75
 
@@ -237,47 +265,40 @@ class GeneticAlgorithm:
         self.population = [TimeTable(day_list, class_list, room_list,
                                      subject_list, teacher_list, student_groups) for i in range(self.population_size)]
 
-    def get_fittest(self):
-        max_fitness = -math.inf
-        fittest = None
-        for timetable in self.population:
-            fitness = timetable.get_fitness()
-            if fitness > max_fitness:
-                max_fitness = fitness
-                fittest = timetable
-        return fittest
+    def get_least_fittest_index(self, lf):
+        for i, gene in enumerate(self.population):
+            if gene == lf:
+                return i
+        return None
 
-    def get_least_fittest_index(self):
-        min_fitness = math.inf
-        least_fit_index = None
-        for i in range(len(self.population)):
-            timetable = self.population[i]
-            fitness = timetable.get_fitness()
-            if fitness < min_fitness:
-                min_fitness = fitness
-                least_fit_index = i
-        return least_fit_index
+    @staticmethod
+    def __fitness_comp(a, b):
+        a_hf, a_sf = a.get_fitness()
+        b_hf, b_sf = b.get_fitness()
 
-    def get_second_fittest(self):
-        max_fitness = -math.inf
-        second_fittest = None
-        fittest = self.get_fittest()
-
-        for timetable in self.population:
-            fitness = timetable.get_fitness()
-            if fitness > max_fitness and fittest != second_fittest:
-                max_fitness = fitness
-                second_fittest = timetable
-        return second_fittest
+        if a_hf < b_hf:
+            return -1
+        elif b_hf < a_hf:
+            return 1
+        else:
+            if a_sf < b_sf:
+                return -1
+            elif b_sf < a_sf:
+                return 1
+            else:
+                return 0
 
     def avg_fitness(self):
-        avg = 0
+        avg = [0, 0]
         for t in self.population:
-            avg += t.get_fitness()
-        return avg / self.population_size
+            f = t.get_fitness()
+            avg[0] += f[0]
+            avg[1] += f[1]
+        return avg[0] / self.population_size, avg[1] / self.population_size
 
     def run_algorithm(self, day_list, class_list, subject_list, room_list, teacher_list, student_group_map_list):
         student_groups = []
+        fittest = None
         for stg_map in student_group_map_list:
             item = {Subject(s): Teacher(t) for s, t in stg_map.items()}
             student_groups.append(item)
@@ -286,10 +307,18 @@ class GeneticAlgorithm:
             day_list, class_list, subject_list, room_list, teacher_list, student_groups)
         for g in range(self.n_generations):
             # Selection
-            new_population = [self.get_fittest()]
+            sorted_population = sorted(self.population, key=functools.cmp_to_key(self.__fitness_comp))
+            fittest = sorted_population[-1]
+            new_population = [fittest]
+            f = fittest.get_fitness()
+            print('Generation {}. Max fitness={}, avg fitness={}'.format(g, f, self.avg_fitness()))
+            if f[0] == math.inf and f[1] == math.inf:
+                print('Reached max fitness at generation {}, stopping..'.format(g))
+                return sorted_population[-1]
+
             while len(new_population) < self.population_size:
-                parent1 = self.get_fittest()
-                parent2 = self.get_second_fittest()
+                parent1 = sorted_population[-1]
+                parent2 = sorted_population[-2]
                 # Crossover
                 if random.uniform(0, 1) < self.crossover_prob:
                     offspring = crossover(parent1, parent2)
@@ -300,17 +329,10 @@ class GeneticAlgorithm:
                 new_population.append(offspring)
 
             self.population = new_population
-            f = self.get_fittest().get_fitness()
 
-            print('Generation {}. Max fitness={}, avg fitness={}'.format(g,
-                                                                         f, self.avg_fitness()))
-            if f == math.inf:
-                print('Reached max fitness at generation {}, stopping..'.format(g))
-                return self.get_fittest()
+        return fittest
 
-        return self.get_fittest()
-
-
+#
 # ga = GeneticAlgorithm(5, 8)
 # fittest = ga.run_algorithm(['Mon', 'Tues', 'Wed', 'Thurs', 'Fri'],
 #                            ['9-10', '10-11', '11-12', '12-13', '13-14', '14-15', '15-16', '16-17'],
