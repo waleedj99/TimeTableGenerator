@@ -3,8 +3,8 @@ from collections import OrderedDict
 import json
 from timetable import GeneticAlgorithm
 
-app = Flask(__name__, static_folder='./TimeTableGen_FE/TimetableFE/time-table/build/static',
-            template_folder='./TimeTableGen_FE/TimetableFE/time-table/build')
+app = Flask(__name__, static_folder='../TimeTableGen_FE/TimetableFE/time-table/build/static',
+            template_folder='../TimeTableGen_FE/TimetableFE/time-table/build')
 
 
 @app.route('/', methods=['GET', 'POST'])
